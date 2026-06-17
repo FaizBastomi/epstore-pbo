@@ -11,6 +11,7 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="models.Produk"%>
 <%@page import="models.Ulasan"%>
+<%@page import="models.Keranjang"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%!
@@ -31,6 +32,10 @@
         return;
     }
     String ctx = request.getContextPath();
+
+    // Jumlah item keranjang (untuk badge) dari session.
+    Keranjang keranjang = (Keranjang) ses.getAttribute("keranjang");
+    int cartCount = (keranjang != null) ? keranjang.getTotalItem() : 0;
 
     Produk produk = (Produk) request.getAttribute("produk");
     if (produk == null) {
@@ -84,7 +89,9 @@
                         <a href="<%= ctx %>/buyer/cart" class="ep-nav-action">
                             <span class="position-relative">
                                 <i class="bi bi-cart3 fs-5"></i>
-                                <span class="ep-cart-badge">0</span>
+                                <% if (cartCount > 0) { %>
+                                <span class="ep-cart-badge"><%= cartCount %></span>
+                                <% } %>
                             </span>
                             Keranjang
                         </a>
@@ -153,25 +160,29 @@
                     </div>
 
                     <!-- Quantity + Add to cart -->
-                    <div class="d-flex align-items-center gap-3 my-4">
-                        <span class="ep-meta-label">Jumlah</span>
-                        <div class="ep-qty">
-                            <button type="button" onclick="changeQty(-1)" aria-label="Kurangi">
-                                <i class="bi bi-dash"></i>
-                            </button>
-                            <input type="text" id="qty" value="<%= stok > 0 ? 1 : 0 %>"
-                                   data-max="<%= stok %>" readonly>
-                            <button type="button" onclick="changeQty(1)" aria-label="Tambah">
-                                <i class="bi bi-plus"></i>
-                            </button>
+                    <form method="post" action="<%= ctx %>/buyer/cart">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="produkId" value="<%= produk.getId() %>">
+                        <div class="d-flex align-items-center gap-3 my-4">
+                            <span class="ep-meta-label">Jumlah</span>
+                            <div class="ep-qty">
+                                <button type="button" onclick="changeQty(-1)" aria-label="Kurangi">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <input type="text" id="qty" name="qty" value="<%= stok > 0 ? 1 : 0 %>"
+                                       data-max="<%= stok %>" readonly>
+                                <button type="button" onclick="changeQty(1)" aria-label="Tambah">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <button type="button" class="ep-btn-cart ep-btn-cart-lg"
-                            <%= stok == 0 ? "disabled" : "" %>>
-                        <i class="bi bi-cart-plus"></i>
-                        <%= stok == 0 ? "Stok Habis" : "Tambah ke Keranjang" %>
-                    </button>
+                        <button type="submit" class="ep-btn-cart ep-btn-cart-lg"
+                                <%= stok == 0 ? "disabled" : "" %>>
+                            <i class="bi bi-cart-plus"></i>
+                            <%= stok == 0 ? "Stok Habis" : "Tambah ke Keranjang" %>
+                        </button>
+                    </form>
                 </div>
             </div>
 
