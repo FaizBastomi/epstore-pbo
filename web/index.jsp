@@ -2,8 +2,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
     HttpSession ses = request.getSession(false);
-    if (ses.getAttribute("username") != null) {
+    if (ses != null && ses.getAttribute("username") != null) {
         response.sendRedirect(request.getContextPath() + "/buyer");
+        return;
     }
 %>
 <!DOCTYPE html>
