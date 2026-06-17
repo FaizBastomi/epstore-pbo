@@ -9,6 +9,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Locale"%>
 <%@page import="models.Produk"%>
+<%@page import="models.Keranjang"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
@@ -18,6 +19,10 @@
         return;
     }
     String ctx = request.getContextPath();
+
+    // Jumlah item keranjang (untuk badge) dari session.
+    Keranjang keranjang = (Keranjang) ses.getAttribute("keranjang");
+    int cartCount = (keranjang != null) ? keranjang.getTotalItem() : 0;
 
     // Data dari BuyerController (DB-based). Bisa null jika JSP diakses langsung
     // tanpa melalui /buyer -> perlakukan sebagai katalog kosong.
@@ -88,7 +93,9 @@
                             <a href="<%= ctx %>/buyer/cart" class="ep-nav-action">
                                 <span class="position-relative">
                                     <i class="bi bi-cart3 fs-5"></i>
-                                    <span class="ep-cart-badge">0</span>
+                                    <% if (cartCount > 0) { %>
+                                    <span class="ep-cart-badge"><%= cartCount %></span>
+                                    <% } %>
                                 </span>
                                 Keranjang
                             </a>
@@ -155,10 +162,15 @@
                             </a>
                             <p class="ep-product-price">Rp<%= hargaFmt %></p>
                             <p class="ep-product-stock">Stok: <%= stok %></p>
-                            <button type="button" class="ep-btn-cart" <%= stok == 0 ? "disabled" : "" %>>
-                                <i class="bi bi-cart-plus"></i>
-                                <%= stok == 0 ? "Stok Habis" : "Tambah ke Keranjang" %>
-                            </button>
+                            <form method="post" action="<%= ctx %>/buyer/cart" class="ep-cart-add-form">
+                                <input type="hidden" name="action" value="add">
+                                <input type="hidden" name="produkId" value="<%= id %>">
+                                <input type="hidden" name="qty" value="1">
+                                <button type="submit" class="ep-btn-cart" <%= stok == 0 ? "disabled" : "" %>>
+                                    <i class="bi bi-cart-plus"></i>
+                                    <%= stok == 0 ? "Stok Habis" : "Tambah ke Keranjang" %>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
