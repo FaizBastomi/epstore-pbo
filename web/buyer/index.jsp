@@ -132,23 +132,27 @@
                 <%
                     if (produkList != null && !produkList.isEmpty()) {
                         for (Produk p : produkList) {
+                            int id = p.getId();
                             String nama = p.getNama();
                             int stok = p.getStok();
                             String gambar = p.getGambar();
                             String hargaFmt = String.format(Locale.US, "%,.0f", p.getHarga())
                                     .replace(',', '.');
+                            String detailUrl = ctx + "/produk?id=" + id;
                 %>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="ep-product">
-                        <div class="ep-product-img">
+                        <a href="<%= detailUrl %>" class="ep-product-img">
                             <i class="bi bi-image placeholder-icon"></i>
                             <% if (gambar != null && !gambar.isEmpty()) { %>
                             <img src="<%= ctx %>/<%= gambar %>" alt="<%= nama %>"
                                  onerror="this.remove();">
                             <% } %>
-                        </div>
+                        </a>
                         <div class="ep-product-body">
-                            <p class="ep-product-name"><%= nama %></p>
+                            <a href="<%= detailUrl %>" class="ep-product-name-link">
+                                <p class="ep-product-name"><%= nama %></p>
+                            </a>
                             <p class="ep-product-price">Rp<%= hargaFmt %></p>
                             <p class="ep-product-stock">Stok: <%= stok %></p>
                             <button type="button" class="ep-btn-cart" <%= stok == 0 ? "disabled" : "" %>>
