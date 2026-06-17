@@ -9,9 +9,21 @@ package models;
  * @author voliya
  */
 public class Produk extends Model<Produk> {
+
+    // Field names MUST match column names in table `produk` (reflection-based mapping).
     private int id, stok;
-    private String nama, deskripsi;
+    private String nama, deskripsi, kategori, gambar, penjual_id;
     private double harga;
+
+    public Produk() {
+        this.table = "produk";
+        this.primaryKey = "id";
+    }
+
+    // ---------- Getters ----------
+    public int getId() {
+        return id;
+    }
 
     public int getStok() {
         return stok;
@@ -29,6 +41,19 @@ public class Produk extends Model<Produk> {
         return harga;
     }
 
+    public String getKategori() {
+        return kategori;
+    }
+
+    public String getGambar() {
+        return gambar;
+    }
+
+    public String getPenjualId() {
+        return penjual_id;
+    }
+
+    // ---------- Setters ----------
     public void setStok(int stok) {
         this.stok = stok;
     }
@@ -43,5 +68,17 @@ public class Produk extends Model<Produk> {
 
     public void setHarga(double harga) {
         this.harga = harga;
+    }
+
+    public void setKategori(String kategori) {
+        this.kategori = kategori;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
+    }
+
+    public void setPenjualId(String penjual_id) {
+        this.penjual_id = penjual_id;
     }
 }

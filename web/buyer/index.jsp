@@ -2,10 +2,13 @@
     Document   : index (Buyer Home / Katalog Produk)
     Created on : Jun 17, 2026
     Author     : Kelompok 5
-    Description: Halaman utama pembeli - katalog produk (UI Reference sec. 2)
+    Description: Halaman utama pembeli - katalog produk (UI Reference sec. 2).
+                 Data produk diambil dari database via BuyerController
+                 (request attribute "produkList"), bukan hardcoded.
 --%>
 <%@page import="java.util.List"%>
-<%@page import="java.util.Arrays"%>
+<%@page import="java.util.Locale"%>
+<%@page import="models.Produk"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
@@ -16,31 +19,21 @@
     }
     String ctx = request.getContextPath();
 
-    // -------------------------------------------------------------------
-    // FRONT-END ONLY: sample data so the catalog renders standalone.
-    // TODO (backend): replace this with products fetched in BuyerController
-    //   e.g. request.getAttribute("produkList") populated from Produk model,
-    //   then iterate over the real list below.
-    // Columns: nama, kategori, harga, stok
-    // -------------------------------------------------------------------
-    String[][] produkList = {
-        {"Headphone Wireless", "Elektronik", "150000", "15"},
-        {"Tas Ransel Pria",    "Fashion",    "120000", "8"},
-        {"Sneakers Casual",    "Fashion",    "200000", "12"},
-        {"Jam Tangan Digital", "Elektronik", "85000",  "20"},
-        {"Power Bank 10000mAh","Elektronik", "95000",  "14"},
-        {"Mie Instan Kuah",    "Makanan",    "3000",   "50"}
-    };
+    // Data dari BuyerController (DB-based). Bisa null jika JSP diakses langsung
+    // tanpa melalui /buyer -> perlakukan sebagai katalog kosong.
+    @SuppressWarnings("unchecked")
+    List<Produk> produkList = (List<Produk>) request.getAttribute("produkList");
 
-    String[] kategoriList = {"Semua", "Elektronik", "Fashion", "Makanan", "Kecantikan", "Lainnya"};
-    String activeKategori = request.getParameter("kategori");
+    String activeKategori = (String) request.getAttribute("activeKategori");
     if (activeKategori == null || activeKategori.isEmpty()) {
         activeKategori = "Semua";
     }
-    String keyword = request.getParameter("q");
+    String keyword = (String) request.getAttribute("keyword");
     if (keyword == null) {
         keyword = "";
     }
+
+    String[] kategoriList = {"Semua", "Elektronik", "Fashion", "Makanan", "Kecantikan", "Lainnya"};
 %>
 <!DOCTYPE html>
 <html lang="id">
@@ -137,29 +130,22 @@
             <!-- Product grid -->
             <div class="row g-3 g-md-4">
                 <%
-                    int shown = 0;
-                    for (String[] p : produkList) {
-                        String nama = p[0];
-                        String kategori = p[1];
-                        long harga = Long.parseLong(p[2]);
-                        int stok = Integer.parseInt(p[3]);
-
-                        // client-side-equivalent filtering (front-end demo)
-                        boolean matchKat = activeKategori.equals("Semua") || activeKategori.equals(kategori);
-                        boolean matchKey = keyword.isEmpty()
-                                || nama.toLowerCase().contains(keyword.toLowerCase());
-                        if (!matchKat || !matchKey) {
-                            continue;
-                        }
-                        shown++;
-
-                        String hargaFmt = String.format("%,d", harga).replace(',', '.');
+                    if (produkList != null && !produkList.isEmpty()) {
+                        for (Produk p : produkList) {
+                            String nama = p.getNama();
+                            int stok = p.getStok();
+                            String gambar = p.getGambar();
+                            String hargaFmt = String.format(Locale.US, "%,.0f", p.getHarga())
+                                    .replace(',', '.');
                 %>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="ep-product">
                         <div class="ep-product-img">
-                            <%-- TODO(backend): use <img src="..."> when product images exist --%>
                             <i class="bi bi-image placeholder-icon"></i>
+                            <% if (gambar != null && !gambar.isEmpty()) { %>
+                            <img src="<%= ctx %>/<%= gambar %>" alt="<%= nama %>"
+                                 onerror="this.remove();">
+                            <% } %>
                         </div>
                         <div class="ep-product-body">
                             <p class="ep-product-name"><%= nama %></p>
@@ -172,9 +158,8 @@
                         </div>
                     </div>
                 </div>
-                <% } %>
-
-                <% if (shown == 0) { %>
+                <%      }
+                    } else { %>
                 <div class="col-12">
                     <div class="ep-empty">
                         <i class="bi bi-search"></i>
