@@ -13,7 +13,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.BarangKeranjang;
 import models.Keranjang;
+import models.Pembeli;
 import models.Produk;
+import models.Transaksi;
 
 /**
  * CartController - mengelola keranjang belanja pembeli (UI Reference sec. 4).
@@ -101,11 +103,13 @@ public class CartController extends HttpServlet {
                 cart.kosongkanKeranjang();
                 break;
             case "checkout":
-                // Finalisasi checkout (pembuatan Transaksi & pembayaran) merupakan
-                // tanggung jawab modul Transaksi/Pembayaran (lihat DesignDoc bagian D,
-                // PIC berbeda) sehingga di luar lingkup fitur keranjang ini.
-                session.setAttribute("cartInfo",
-                        "Fitur checkout akan tersedia setelah modul Transaksi & Pembayaran selesai.");
+                // Finalisasi checkout: buat Transaksi dari isi keranjang lalu
+                // arahkan ke halaman pembayaran. Bila gagal (mis. keranjang
+                // kosong), handleCheckout mengembalikan false dan alur jatuh ke
+                // redirect keranjang biasa di bawah.
+                if (handleCheckout(request, response, session, cart)) {
+                    return; // sudah redirect ke halaman pembayaran
+                }
                 break;
             default:
                 break;
@@ -191,6 +195,56 @@ public class CartController extends HttpServlet {
         if (produkId != null) {
             cart.hapusItem(produkId);
         }
+    }
+
+    /**
+     * Finalisasi checkout: buat {@link Transaksi} dari isi keranjang, kosongkan
+     * keranjang, lalu redirect ke halaman pembayaran (dummy).
+     *
+     * @return {@code true} bila pesanan berhasil dibuat dan response sudah
+     *         diarahkan ke halaman pembayaran; {@code false} bila gagal
+     *         (pemanggil melanjutkan ke redirect keranjang biasa).
+     */
+    private boolean handleCheckout(HttpServletRequest request, HttpServletResponse response,
+            HttpSession session, Keranjang cart) throws IOException {
+
+        if (cart == null || cart.isEmpty()) {
+            session.setAttribute("cartInfo",
+                    "Keranjang masih kosong, tidak ada yang bisa di-checkout.");
+            return false;
+        }
+
+        // Dapatkan id pembeli: dari session bila ada, jika tidak cari via username.
+        String pembeliId = (String) session.getAttribute("pembeli_id");
+        if (pembeliId == null) {
+            String username = (String) session.getAttribute("username");
+            if (username != null) {
+                Pembeli pembeli = new Pembeli().getPembeliByUsername(username);
+                if (pembeli != null) {
+                    pembeliId = pembeli.getId();
+                    session.setAttribute("pembeli_id", pembeliId);
+                }
+            }
+        }
+        if (pembeliId == null) {
+            session.setAttribute("cartInfo",
+                    "Sesi pembeli tidak valid. Silakan login ulang.");
+            return false;
+        }
+
+        String metode = request.getParameter("metode");
+        Transaksi transaksi = new Transaksi();
+        int idTransaksi = transaksi.buatPesanan(cart, pembeliId, metode);
+        if (idTransaksi <= 0) {
+            session.setAttribute("cartInfo",
+                    "Gagal membuat pesanan: " + transaksi.getMessage());
+            return false;
+        }
+
+        // Pesanan tersimpan -> keranjang dikosongkan & arahkan ke pembayaran.
+        cart.kosongkanKeranjang();
+        response.sendRedirect(request.getContextPath() + "/buyer/payment?id=" + idTransaksi);
+        return true;
     }
 
     private static Integer parseInt(String s) {
