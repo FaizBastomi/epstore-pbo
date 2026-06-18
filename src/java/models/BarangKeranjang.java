@@ -1,50 +1,39 @@
 package models;
 
-/**
- * BarangKeranjang - kelas perantara yang mendefinisikan kuantitas sebuah
- * Produk di dalam Keranjang (Class Diagram, bagian C).
- *
- * Relasi: Agregasi (wajik putih) dengan Produk. Artinya, jika item dihapus
- * dari keranjang, objek asli Produk di katalog TIDAK ikut terhapus -- hanya
- * referensinya yang dilepas.
- *
- * Objek ini hidup sementara di dalam HttpSession (keranjang belanja), bukan
- * disimpan ke database, sehingga kelas ini tidak mewarisi {@link Model}.
- *
- * @author Kelompok 5
- */
-public class BarangKeranjang {
+public class BarangKeranjang extends Model<BarangKeranjang> {
 
     private int id;
-    private Produk produk;
+    private int id_keranjang;
+    private int id_produk;
     private int qty;
 
-    public BarangKeranjang(Produk produk, int qty) {
-        this.id = (produk != null) ? produk.getId() : 0;
-        this.produk = produk;
+    public BarangKeranjang() {
+        this.table = "barang_keranjang";
+        this.primaryKey = "id";
+    }
+
+    public BarangKeranjang(int idKeranjang, int idProduk, int qty) {
+        this();
+        this.id_keranjang = idKeranjang;
+        this.id_produk = idProduk;
         this.qty = qty;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public int getIdKeranjang() { return id_keranjang; }
+    public void setIdKeranjang(int id_keranjang) { this.id_keranjang = id_keranjang; }
+    public int getIdProduk() { return id_produk; }
+    public void setIdProduk(int id_produk) { this.id_produk = id_produk; }
+    public int getQty() { return qty; }
+    public void setQty(int qty) { this.qty = qty; }
 
     public Produk getProduk() {
-        return produk;
+        return (id_produk > 0) ? new Produk().find(String.valueOf(this.id_produk)) : null;
     }
 
-    public int getQty() {
-        return qty;
-    }
-
-    public void setQty(int qty) {
-        this.qty = qty;
-    }
-
-    /**
-     * Subtotal item = harga produk * kuantitas.
-     */
     public double getSubtotal() {
-        return (produk != null) ? produk.getHarga() * qty : 0;
+        Produk p = getProduk();
+        return (p != null) ? p.getHarga() * qty : 0;
     }
 }

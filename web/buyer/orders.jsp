@@ -1,12 +1,3 @@
-<%-- 
-    Document   : orders (Buyer - Pesanan Saya)
-    Created on : Jun 18, 2026
-    Author     : Kelompok 5
-    Description: Halaman "Pesanan Saya" (UI Reference sec. 5). Menampilkan
-                 seluruh transaksi milik pembeli beserta status, dengan tab
-                 filter status. Data dikirim oleh OrderController (attribute
-                 "pesananList" + "activeStatus").
---%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>

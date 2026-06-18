@@ -2,129 +2,92 @@ package models;
 
 import java.util.ArrayList;
 
-/**
- * Keranjang - wadah penampung barang sementara bagi Pembeli
- * (Class Diagram, bagian C; UI Reference sec. 4 "Keranjang Belanja").
- *
- * Relasi: Komposisi dengan BarangKeranjang. Keranjang dimiliki oleh Pembeli
- * (komposisi: keberadaan keranjang bergantung pada pembeli) dan disimpan pada
- * HttpSession sebagai data sementara, sesuai deskripsi pada dokumen desain.
- *
- * Catatan: Pada diagram, getDaftarItem() tertulis mengembalikan
- * ArrayList&lt;Produk&gt;, namun atribut daftarItem bertipe
- * ArrayList&lt;BarangKeranjang&gt;. Di sini dikembalikan
- * ArrayList&lt;BarangKeranjang&gt; agar kuantitas tiap produk tetap terbawa
- * untuk ditampilkan pada halaman keranjang.
- *
- * @author Kelompok 5
- */
-public class Keranjang {
+public class Keranjang extends Model<Keranjang> {
 
-    private int id_keranjang;
+    private int id;
+    private String id_pembeli;
     private double total_harga;
-    private ArrayList<BarangKeranjang> daftarItem;
 
     public Keranjang() {
-        this.daftarItem = new ArrayList<>();
+        this.table = "keranjang";
+        this.primaryKey = "id";
     }
 
-    /**
-     * Tambah item ke keranjang. Jika produk yang sama sudah ada, kuantitasnya
-     * digabung (ditambahkan), bukan menambah baris baru.
-     */
-    public void tambahItem(BarangKeranjang barang) {
-        if (barang == null || barang.getProduk() == null) {
-            return;
-        }
-        BarangKeranjang existing = getItem(barang.getProduk().getId());
-        if (existing != null) {
-            existing.setQty(existing.getQty() + barang.getQty());
-        } else {
-            daftarItem.add(barang);
-        }
-        hitungTotal();
-    }
-
-    /**
-     * Hapus item dari keranjang berdasarkan id produk.
-     */
-    public void hapusItem(int idProduk) {
-        daftarItem.removeIf(item -> item.getProduk() != null
-                && item.getProduk().getId() == idProduk);
-        hitungTotal();
-    }
-
-    /**
-     * Ubah kuantitas item produk tertentu (minimal 1).
-     */
-    public void ubahQty(int idProduk, int qty) {
-        BarangKeranjang item = getItem(idProduk);
-        if (item != null) {
-            item.setQty(Math.max(1, qty));
-        }
-        hitungTotal();
-    }
-
-    /**
-     * Kosongkan seluruh isi keranjang.
-     */
-    public void kosongkanKeranjang() {
-        daftarItem.clear();
-        hitungTotal();
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public String getIdPembeli() { return id_pembeli; }
+    public void setIdPembeli(String id_pembeli) { this.id_pembeli = id_pembeli; }
+    public double getTotalHarga() { return total_harga; }
+    public void setTotalHarga(double total_harga) { this.total_harga = total_harga; }
 
     public ArrayList<BarangKeranjang> getDaftarItem() {
-        return daftarItem;
+        BarangKeranjang bkModel = new BarangKeranjang();
+        bkModel.where("id_keranjang = " + this.getId());
+        ArrayList<BarangKeranjang> list = bkModel.get();
+        return (list != null) ? list : new ArrayList<>();
     }
 
-    /**
-     * Cari item berdasarkan id produk; null jika tidak ada.
-     */
-    public BarangKeranjang getItem(int idProduk) {
-        for (BarangKeranjang item : daftarItem) {
-            if (item.getProduk() != null && item.getProduk().getId() == idProduk) {
-                return item;
-            }
+    private void hitungTotal() {
+        double total = 0;
+        for (BarangKeranjang item : getDaftarItem()) {
+            total += item.getSubtotal();
         }
-        return null;
+        this.total_harga = total;
+        this.update();
     }
 
-    /**
-     * Total seluruh unit produk di keranjang (untuk badge keranjang).
-     */
+    public void tambahItem(int idProduk, int qty) {
+        BarangKeranjang existing = getItem(idProduk);
+        if (existing != null) {
+            existing.setQty(existing.getQty() + qty);
+            existing.update();
+        } else {
+            BarangKeranjang baru = new BarangKeranjang(this.getId(), idProduk, qty);
+            baru.insert();
+        }
+        hitungTotal();
+    }
+
+    public void hapusItem(int idProduk) {
+        BarangKeranjang existing = getItem(idProduk);
+        if (existing != null) {
+            existing.delete();
+        }
+        hitungTotal();
+    }
+
+    public void ubahQty(int idProduk, int qty) {
+        BarangKeranjang existing = getItem(idProduk);
+        if (existing != null) {
+            existing.setQty(Math.max(1, qty));
+            existing.update();
+        }
+        hitungTotal();
+    }
+
+    public void kosongkanKeranjang() {
+        for (BarangKeranjang item : getDaftarItem()) {
+            item.delete();
+        }
+        hitungTotal();
+    }
+
+    public BarangKeranjang getItem(int idProduk) {
+        BarangKeranjang bkModel = new BarangKeranjang();
+        bkModel.where("id_keranjang = " + this.getId() + " AND id_produk = " + idProduk);
+        ArrayList<BarangKeranjang> existings = bkModel.get();
+        return (existings != null && !existings.isEmpty()) ? existings.get(0) : null;
+    }
+
     public int getTotalItem() {
         int total = 0;
-        for (BarangKeranjang item : daftarItem) {
+        for (BarangKeranjang item : getDaftarItem()) {
             total += item.getQty();
         }
         return total;
     }
 
     public boolean isEmpty() {
-        return daftarItem.isEmpty();
-    }
-
-    /**
-     * Total harga keranjang (selalu dihitung ulang dari daftar item).
-     */
-    public double getTotalHarga() {
-        hitungTotal();
-        return total_harga;
-    }
-
-    private void hitungTotal() {
-        double total = 0;
-        for (BarangKeranjang item : daftarItem) {
-            total += item.getSubtotal();
-        }
-        this.total_harga = total;
-    }
-
-    public int getIdKeranjang() {
-        return id_keranjang;
-    }
-
-    public void setIdKeranjang(int id_keranjang) {
-        this.id_keranjang = id_keranjang;
+        return getDaftarItem().isEmpty();
     }
 }

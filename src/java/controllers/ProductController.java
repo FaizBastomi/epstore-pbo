@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controllers;
 
 import java.io.IOException;
@@ -15,10 +11,6 @@ import models.Penjual;
 import models.Produk;
 import models.Ulasan;
 
-/**
- * Serves the product detail page (UI Reference sec. 3).
- *
- */
 @WebServlet(name = "ProductController", urlPatterns = { "/produk" })
 public class ProductController extends HttpServlet {
 

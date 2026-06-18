@@ -1,11 +1,3 @@
-<%-- 
-    Document   : product (Buyer - Detail Produk)
-    Created on : Jun 17, 2026
-    Author     : Kelompok 5
-    Description: Halaman detail produk (UI Reference sec. 3).
-                 Data produk, penjual, dan ulasan diambil dari database
-                 via ProductController.
---%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>

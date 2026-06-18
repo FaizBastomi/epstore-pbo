@@ -1,15 +1,3 @@
-<%-- 
-    Document   : payment (Buyer - Halaman Pembayaran DUMMY)
-    Created on : Jun 18, 2026
-    Author     : Kelompok 5
-    Description: Halaman pembayaran SEMENTARA (dummy). Langkah-langkah
-                 pembayaran sesungguhnya dikerjakan developer modul Pembayaran.
-                 Untuk sekarang hanya menampilkan ringkasan pesanan + 2 tombol:
-                   - "Pembayaran Berhasil" -> status pesanan jadi "Diproses".
-                   - "Menunggu Pembayaran" -> status tetap menunggu.
-                 Data transaksi dikirim oleh PaymentController (attribute
-                 "transaksi").
---%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Locale"%>
 <%@page import="models.Transaksi"%>

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controllers;
 
 import java.io.IOException;
@@ -13,10 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.Pembeli;
 
-/**
- *
- * @author voliya
- */
 @WebServlet(name = "AuthController", urlPatterns = {"/auth"})
 public class AuthController extends HttpServlet {
 

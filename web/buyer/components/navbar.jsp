@@ -1,3 +1,4 @@
+<%@page import="models.Keranjang"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <% String ctx = request.getContextPath();
     boolean showSearch = "true".equals(request.getParameter("showSearch"));
@@ -8,7 +9,31 @@
     String username = "";
     if (session != null && session.getAttribute("username") != null) {
         username = (String) session.getAttribute("username");
-        } %>
+    }
+    Keranjang keranjangNavbar = (session != null) ? (Keranjang) session.getAttribute("keranjang") : null;
+    if (keranjangNavbar == null && session != null && session.getAttribute("pembeli_id") != null) {
+        String pId = (String) session.getAttribute("pembeli_id");
+        Keranjang cModel = new Keranjang();
+        cModel.where("id_pembeli = '" + pId + "'");
+        java.util.ArrayList<Keranjang> carts = cModel.get();
+        if (carts != null && !carts.isEmpty()) {
+            keranjangNavbar = carts.get(0);
+        } else {
+            keranjangNavbar = new Keranjang();
+            keranjangNavbar.setIdPembeli(pId);
+            keranjangNavbar.setTotalHarga(0);
+            keranjangNavbar.insert();
+            cModel.where("id_pembeli = '" + pId + "'");
+            carts = cModel.get();
+            keranjangNavbar = carts.get(0);
+        }
+        session.setAttribute("keranjang", keranjangNavbar);
+    }
+    int cartCountNavbar = (keranjangNavbar != null) ? keranjangNavbar.getTotalItem() : 0;
+
+    String uriNavbar = request.getRequestURI();
+    boolean isCartPage = uriNavbar.endsWith("cart.jsp") || uriNavbar.endsWith("/cart");
+%>
 <!-- ===================== TOP NAVBAR ===================== -->
 <nav class="ep-navbar">
     <div class="container py-2">
@@ -36,10 +61,12 @@
             <!-- Actions -->
             <div class="col-auto">
                 <div class="d-flex align-items-center gap-4">
-                    <a href="<%= ctx%>/buyer/cart" class="ep-nav-action">
+                    <a href="<%= ctx%>/buyer/cart" class="ep-nav-action <%= isCartPage ? "active" : ""%>">
                         <span class="position-relative">
                             <i class="bi bi-cart3 fs-5"></i>
-                            <span class="ep-cart-badge">0</span>
+                            <% if (cartCountNavbar > 0) {%>
+                            <span class="ep-cart-badge"><%= cartCountNavbar%></span>
+                            <% }%>
                         </span>
                         Keranjang
                     </a>
@@ -85,10 +112,12 @@
                 <i class="bi bi-bag-fill"></i> EpStore
             </a>
             <div class="d-flex align-items-center gap-4">
-                <a href="<%= ctx%>/buyer/cart" class="ep-nav-action">
+                <a href="<%= ctx%>/buyer/cart" class="ep-nav-action <%= isCartPage ? "active" : ""%>">
                     <span class="position-relative">
                         <i class="bi bi-cart3 fs-5"></i>
-                        <span class="ep-cart-badge">0</span>
+                        <% if (cartCountNavbar > 0) {%>
+                        <span class="ep-cart-badge"><%= cartCountNavbar%></span>
+                        <% }%>
                     </span>
                     Keranjang
                 </a>
