@@ -463,3 +463,409 @@ body {
     font-size: .9rem;
     color: #374151;
 }
+
+
+/* =====================================================================
+   KERANJANG BELANJA (UI Reference sec. 4)
+   ===================================================================== */
+
+.ep-page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+}
+
+/* Make nav links usable as active tabs on the cart navbar */
+.ep-nav-action.active {
+    color: var(--ep-blue);
+}
+
+/* ---------- Card wrapper ---------- */
+.ep-cart-card {
+    background: #fff;
+    border: 1px solid var(--ep-border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.ep-btn-shop {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    background: var(--ep-blue);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    border-radius: 8px;
+    padding: .6rem 1.4rem;
+}
+.ep-btn-shop:hover {
+    background: var(--ep-blue-dark);
+    color: #fff;
+}
+
+/* ---------- Cart table ---------- */
+.ep-cart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.ep-cart-table thead th {
+    text-align: left;
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--ep-muted);
+    text-transform: none;
+    padding: .5rem .75rem;
+    border-bottom: 1px solid var(--ep-border);
+}
+.ep-cart-table tbody td {
+    padding: 1rem .75rem;
+    border-bottom: 1px solid var(--ep-border);
+    vertical-align: middle;
+}
+.ep-cart-table .col-harga,
+.ep-cart-table .col-subtotal { white-space: nowrap; }
+.ep-cart-table .col-jumlah { width: 150px; }
+.ep-cart-table .col-aksi { width: 70px; text-align: center; }
+.ep-cart-table tbody td:last-child { text-align: center; }
+
+.ep-cart-product {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+}
+.ep-cart-thumb {
+    position: relative;
+    flex: 0 0 auto;
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    background: #f1f3f5;
+    border: 1px solid var(--ep-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #adb5bd;
+}
+.ep-cart-thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.ep-cart-name {
+    font-weight: 600;
+    font-size: .95rem;
+    color: var(--ep-text);
+    text-decoration: none;
+}
+.ep-cart-name:hover { color: var(--ep-blue); }
+
+.ep-cart-cell {
+    font-size: .92rem;
+    color: var(--ep-text);
+}
+.ep-cart-subtotal { font-weight: 700; }
+
+/* ---------- Quantity control (forms inside .ep-qty) ---------- */
+.ep-qty .ep-qty-form {
+    margin: 0;
+    display: inline-flex;
+}
+.ep-qty .ep-qty-val {
+    width: 48px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--ep-border);
+    border-right: 1px solid var(--ep-border);
+    font-weight: 600;
+    background: #fff;
+}
+
+/* ---------- Trash / remove button ---------- */
+.ep-btn-trash {
+    background: transparent;
+    border: none;
+    color: var(--ep-muted);
+    font-size: 1.05rem;
+    cursor: pointer;
+    padding: .35rem .5rem;
+    border-radius: 6px;
+    transition: color .15s ease, background .15s ease;
+}
+.ep-btn-trash:hover {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+/* ---------- Total row under table ---------- */
+.ep-cart-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 2.5rem;
+    padding-top: 1rem;
+    margin-top: .25rem;
+}
+.ep-cart-total-label {
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+.ep-cart-total-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    min-width: 130px;
+    text-align: right;
+}
+
+/* ---------- Payment method options ---------- */
+.ep-pay-option {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .55rem 0;
+}
+.ep-pay-option .form-check-input {
+    margin: 0;
+    cursor: pointer;
+}
+.ep-pay-option .form-check-input:checked {
+    background-color: var(--ep-blue);
+    border-color: var(--ep-blue);
+}
+.ep-pay-option label {
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--ep-text);
+    cursor: pointer;
+}
+
+/* ---------- Payment summary card ---------- */
+.ep-summary-card {
+    background: #fff;
+    border: 1px solid var(--ep-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+.ep-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+.ep-summary-row > span:first-child {
+    font-weight: 600;
+    color: var(--ep-text);
+}
+.ep-summary-total {
+    color: var(--ep-orange);
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+.ep-btn-checkout {
+    width: 100%;
+    background: var(--ep-orange);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: .98rem;
+    border-radius: 8px;
+    padding: .75rem;
+    transition: background .15s ease;
+}
+.ep-btn-checkout:hover {
+    background: var(--ep-orange-dark);
+    color: #fff;
+}
+
+/* Keep add-to-cart form filling the card bottom on catalog cards */
+.ep-cart-add-form {
+    margin-top: auto;
+    width: 100%;
+}
+.ep-cart-add-form .ep-btn-cart {
+    margin-top: 0;
+}
+
+
+/* =====================================================================
+   PESANAN SAYA (UI Reference sec. 5) + PEMBAYARAN (dummy)
+   ===================================================================== */
+
+/* ---------- Tab filter status ---------- */
+.ep-order-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: 1.25rem;
+}
+.ep-order-tab {
+    border: 1px solid var(--ep-border);
+    background: #fff;
+    color: var(--ep-text);
+    border-radius: 8px;
+    padding: .4rem 1rem;
+    font-size: .85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .15s ease;
+}
+.ep-order-tab:hover {
+    border-color: var(--ep-blue);
+    color: var(--ep-blue);
+}
+.ep-order-tab.active {
+    background: var(--ep-blue);
+    border-color: var(--ep-blue);
+    color: #fff;
+}
+
+/* ---------- Order card ---------- */
+.ep-order-card {
+    background: #fff;
+    border: 1px solid var(--ep-border);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1rem;
+}
+.ep-order-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .55rem;
+}
+.ep-order-id {
+    font-weight: 700;
+    font-size: 1rem;
+}
+.ep-order-date {
+    color: var(--ep-muted);
+    font-size: .85rem;
+}
+.ep-order-products {
+    color: #374151;
+    font-size: .92rem;
+    margin-bottom: .85rem;
+}
+.ep-order-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .75rem;
+    border-top: 1px solid var(--ep-border);
+    padding-top: .85rem;
+}
+.ep-order-total {
+    font-size: .92rem;
+    color: var(--ep-text);
+}
+.ep-order-total strong {
+    font-weight: 800;
+}
+.ep-order-actions {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+/* ---------- Status badge ---------- */
+.ep-status-badge {
+    display: inline-block;
+    font-size: .75rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: .3rem .8rem;
+    white-space: nowrap;
+}
+.ep-status-menunggu {
+    background: #fef3c7;
+    color: #b45309;
+}
+.ep-status-diproses {
+    background: #ffedd5;
+    color: var(--ep-orange-dark);
+}
+.ep-status-dikirim {
+    background: #dbeafe;
+    color: var(--ep-blue-dark);
+}
+.ep-status-selesai {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+/* ---------- Secondary action button on order card ---------- */
+.ep-btn-order {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    border: 1px solid var(--ep-border);
+    background: #fff;
+    color: var(--ep-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .85rem;
+    border-radius: 8px;
+    padding: .4rem 1rem;
+    transition: all .15s ease;
+}
+.ep-btn-order:hover {
+    border-color: var(--ep-blue);
+    color: var(--ep-blue);
+}
+
+/* ---------- Payment page ---------- */
+.ep-pay-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+.ep-pay-order-id {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+.ep-pay-method {
+    color: var(--ep-muted);
+    font-size: .88rem;
+    margin-top: .15rem;
+}
+
+.ep-btn-pay-success,
+.ep-btn-pay-wait {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .45rem;
+    border: none;
+    font-weight: 700;
+    font-size: .92rem;
+    border-radius: 8px;
+    padding: .75rem;
+    transition: background .15s ease;
+}
+.ep-btn-pay-success {
+    background: #16a34a;
+    color: #fff;
+}
+.ep-btn-pay-success:hover {
+    background: #15803d;
+    color: #fff;
+}
+.ep-btn-pay-wait {
+    background: #fff;
+    color: var(--ep-text);
+    border: 1px solid var(--ep-border);
+}
+.ep-btn-pay-wait:hover {
+    border-color: var(--ep-orange);
+    color: var(--ep-orange-dark);
+}

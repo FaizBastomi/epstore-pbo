@@ -85,6 +85,7 @@ public class AuthController extends HttpServlet {
 
                 session.setAttribute("username", username);
                 session.setAttribute("email", fullPembeliData != null ? fullPembeliData.getEmail() : null);
+                session.setAttribute("pembeli_id", fullPembeliData != null ? fullPembeliData.getId() : null);
                 response.sendRedirect(request.getContextPath() + "/");
             } else {
                 request.setAttribute("error", "Username atau password salah");

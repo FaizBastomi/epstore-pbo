@@ -36,6 +36,10 @@ public class Akun extends Model<Akun> {
         this.update();
     }
 
+    public String getId() {
+        return id;
+    }
+
     public String getEmail() {
         return email;
     }
