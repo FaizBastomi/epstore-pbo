@@ -20,7 +20,7 @@
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= 5; i++) {
             sb.append(i <= rating ? "<i class=\"bi bi-star-fill\"></i>"
-                                  : "<i class=\"bi bi-star\"></i>");
+                    : "<i class=\"bi bi-star\"></i>");
         }
         return sb.toString();
     }
@@ -66,53 +66,32 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><%= nama %> - EpStore</title>
+        <title><%= nama%> - EpStore</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-        <link href="<%= ctx %>/sources/buyer.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <link href="<%= ctx%>/sources/buyer.css" rel="stylesheet">
     </head>
 
     <body>
 
-        <!-- ===================== TOP NAVBAR ===================== -->
-        <nav class="ep-navbar">
-            <div class="container py-2">
-                <div class="d-flex align-items-center justify-content-between">
-                    <a href="<%= ctx %>/buyer" class="ep-brand">
-                        <i class="bi bi-bag-fill"></i> EpStore
-                    </a>
-                    <div class="d-flex align-items-center gap-4">
-                        <a href="<%= ctx %>/buyer/cart" class="ep-nav-action">
-                            <span class="position-relative">
-                                <i class="bi bi-cart3 fs-5"></i>
-                                <% if (cartCount > 0) { %>
-                                <span class="ep-cart-badge"><%= cartCount %></span>
-                                <% } %>
-                            </span>
-                            Keranjang
-                        </a>
-                        <a href="<%= ctx %>/auth?logout" class="ep-nav-action">
-                            <i class="bi bi-box-arrow-right"></i> Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="components/navbar.jsp">
+            <jsp:param name="showSearch" value="false" />
+        </jsp:include>
 
         <!-- ===================== CONTENT ===================== -->
         <main class="container py-4">
 
             <!-- Breadcrumb -->
             <nav class="ep-breadcrumb mb-4" aria-label="breadcrumb">
-                <a href="<%= ctx %>/buyer">Home</a>
+                <a href="<%= ctx%>/buyer">Home</a>
                 <i class="bi bi-chevron-right"></i>
-                <a href="<%= ctx %>/buyer?kategori=<%= kategori %>"><%= kategori %></a>
+                <a href="<%= ctx%>/buyer?kategori=<%= kategori%>"><%= kategori%></a>
                 <i class="bi bi-chevron-right"></i>
-                <span class="current"><%= nama %></span>
+                <span class="current"><%= nama%></span>
             </nav>
 
             <div class="row g-4">
@@ -120,43 +99,43 @@
                 <div class="col-lg-5">
                     <div class="ep-detail-img mb-3">
                         <i class="bi bi-image placeholder-icon"></i>
-                        <% if (gambar != null && !gambar.isEmpty()) { %>
-                        <img src="<%= ctx %>/<%= gambar %>" alt="<%= nama %>" onerror="this.remove();">
+                        <% if (gambar != null && !gambar.isEmpty()) {%>
+                        <img src="<%= ctx%>/<%= gambar%>" alt="<%= nama%>" onerror="this.remove();">
                         <% } %>
                     </div>
                     <div class="ep-thumbs">
                         <div class="ep-thumb active">
                             <i class="bi bi-image"></i>
-                            <% if (gambar != null && !gambar.isEmpty()) { %>
-                            <img src="<%= ctx %>/<%= gambar %>" alt="<%= nama %>" onerror="this.remove();">
-                            <% } %>
+                            <% if (gambar != null && !gambar.isEmpty()) {%>
+                            <img src="<%= ctx%>/<%= gambar%>" alt="<%= nama%>" onerror="this.remove();">
+                            <% }%>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right: info -->
                 <div class="col-lg-7">
-                    <h1 class="ep-detail-name"><%= nama %></h1>
-                    <p class="ep-detail-price">Rp<%= hargaFmt %></p>
+                    <h1 class="ep-detail-name"><%= nama%></h1>
+                    <p class="ep-detail-price">Rp<%= hargaFmt%></p>
 
                     <div class="ep-detail-meta">
                         <div class="ep-meta-row">
                             <span class="ep-meta-label">Kategori</span>
-                            <span class="ep-meta-value"><%= kategori %></span>
+                            <span class="ep-meta-value"><%= kategori%></span>
                         </div>
                         <div class="ep-meta-row">
                             <span class="ep-meta-label">Stok</span>
-                            <span class="ep-meta-value"><%= stok %></span>
+                            <span class="ep-meta-value"><%= stok%></span>
                         </div>
                         <div class="ep-meta-row">
                             <span class="ep-meta-label">Penjual</span>
-                            <span class="ep-meta-value"><%= namaToko %></span>
+                            <span class="ep-meta-value"><%= namaToko%></span>
                         </div>
                     </div>
 
                     <div class="ep-detail-desc">
                         <span class="ep-meta-label d-block mb-1">Deskripsi</span>
-                        <p class="mb-0"><%= deskripsi == null ? "" : deskripsi %></p>
+                        <p class="mb-0"><%= deskripsi == null ? "" : deskripsi%></p>
                     </div>
 
                     <!-- Quantity + Add to cart -->
@@ -191,41 +170,44 @@
                 <h2 class="ep-section-title">Ulasan Pembeli</h2>
 
                 <% if (ulasanList != null && !ulasanList.isEmpty()) {
-                       for (Ulasan u : ulasanList) {
-                           String tgl = u.getTanggal() != null ? sdf.format(u.getTanggal()) : "";
+                        for (Ulasan u : ulasanList) {
+                            String tgl = u.getTanggal() != null ? sdf.format(u.getTanggal()) : "";
                 %>
                 <div class="ep-review">
                     <div class="ep-review-avatar"><i class="bi bi-person-circle"></i></div>
                     <div class="ep-review-body">
                         <div class="ep-review-head">
-                            <span class="ep-review-name"><%= u.getNamaPembeli() %></span>
-                            <span class="ep-stars"><%= renderStars(u.getRating()) %></span>
-                            <span class="ep-review-date"><%= tgl %></span>
+                            <span class="ep-review-name"><%= u.getNamaPembeli()%></span>
+                            <span class="ep-stars"><%= renderStars(u.getRating())%></span>
+                            <span class="ep-review-date"><%= tgl%></span>
                         </div>
-                        <p class="ep-review-text"><%= u.getKomentar() == null ? "" : u.getKomentar() %></p>
+                        <p class="ep-review-text"><%= u.getKomentar() == null ? "" : u.getKomentar()%></p>
                     </div>
                 </div>
                 <%     }
-                   } else { %>
+                } else { %>
                 <div class="ep-empty">
                     <i class="bi bi-chat-square-text"></i>
                     Belum ada ulasan untuk produk ini.
                 </div>
-                <% } %>
+                <% }%>
             </section>
         </main>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            function changeQty(delta) {
-                const input = document.getElementById('qty');
-                const max = parseInt(input.dataset.max) || 0;
-                let val = (parseInt(input.value) || 0) + delta;
-                if (val < 1) val = 1;
-                if (val > max) val = max;
-                if (max === 0) val = 0;
-                input.value = val;
-            }
+                                function changeQty(delta) {
+                                    const input = document.getElementById('qty');
+                                    const max = parseInt(input.dataset.max) || 0;
+                                    let val = (parseInt(input.value) || 0) + delta;
+                                    if (val < 1)
+                                        val = 1;
+                                    if (val > max)
+                                        val = max;
+                                    if (max === 0)
+                                        val = 0;
+                                    input.value = val;
+                                }
         </script>
     </body>
 </html>

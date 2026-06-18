@@ -53,69 +53,28 @@
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
         <!-- Bootstrap 5 CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Bootstrap Icons -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
         <!-- Buyer theme -->
-        <link href="<%= ctx %>/sources/buyer.css" rel="stylesheet">
+        <link href="<%= ctx%>/sources/buyer.css" rel="stylesheet">
     </head>
 
     <body>
 
-        <!-- ===================== TOP NAVBAR ===================== -->
-        <nav class="ep-navbar">
-            <div class="container py-2">
-                <div class="row align-items-center g-2">
-                    <!-- Brand -->
-                    <div class="col-auto">
-                        <a href="<%= ctx %>/buyer" class="ep-brand">
-                            <i class="bi bi-bag-fill"></i> EpStore
-                        </a>
-                    </div>
-
-                    <!-- Search -->
-                    <div class="col">
-                        <form class="ep-search" action="<%= ctx %>/buyer" method="GET">
-                            <div class="input-group">
-                                <input type="text" name="q" class="form-control"
-                                       placeholder="Cari produk..."
-                                       value="<%= keyword.replace("\"", "&quot;") %>">
-                                <button class="btn" type="submit" aria-label="Cari">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="col-auto">
-                        <div class="d-flex align-items-center gap-4">
-                            <a href="<%= ctx %>/buyer/cart" class="ep-nav-action">
-                                <span class="position-relative">
-                                    <i class="bi bi-cart3 fs-5"></i>
-                                    <% if (cartCount > 0) { %>
-                                    <span class="ep-cart-badge"><%= cartCount %></span>
-                                    <% } %>
-                                </span>
-                                Keranjang
-                            </a>
-                            <a href="<%= ctx %>/auth?logout" class="ep-nav-action">
-                                <i class="bi bi-box-arrow-right"></i> Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="components/navbar.jsp">
+            <jsp:param name="showSearch" value="true" />
+            <jsp:param name="keyword" value="<%= keyword%>" />
+        </jsp:include>
 
         <!-- ===================== SECONDARY MENU ===================== -->
         <div class="ep-submenu">
             <div class="container">
                 <div class="d-flex gap-4">
-                    <a href="<%= ctx %>/buyer" class="active">Home</a>
-                    <a href="<%= ctx %>/buyer#kategori">Kategori</a>
-                    <a href="<%= ctx %>/buyer/orders">Pesanan Saya</a>
-                    <a href="<%= ctx %>/buyer/reviews">Ulasan</a>
+                    <a href="<%= ctx%>/buyer" class="active">Home</a>
+                    <a href="<%= ctx%>/buyer#kategori">Kategori</a>
+                    <a href="<%= ctx%>/buyer/orders">Pesanan Saya</a>
+                    <a href="<%= ctx%>/buyer/reviews">Ulasan</a>
                 </div>
             </div>
         </div>
@@ -126,11 +85,11 @@
             <!-- Category filter -->
             <div class="ep-categories mb-4" id="kategori">
                 <% for (String kat : kategoriList) {
-                       boolean isActive = kat.equals(activeKategori);
-                       String href = ctx + "/buyer?kategori=" + kat
-                               + (keyword.isEmpty() ? "" : "&q=" + keyword);
+                        boolean isActive = kat.equals(activeKategori);
+                        String href = ctx + "/buyer?kategori=" + kat
+                                + (keyword.isEmpty() ? "" : "&q=" + keyword);
                 %>
-                <a href="<%= href %>" class="ep-chip <%= isActive ? "active" : "" %>"><%= kat %></a>
+                <a href="<%= href%>" class="ep-chip <%= isActive ? "active" : ""%>"><%= kat%></a>
                 <% } %>
             </div>
 
@@ -149,16 +108,16 @@
                 %>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="ep-product">
-                        <a href="<%= detailUrl %>" class="ep-product-img">
+                        <a href="<%= detailUrl%>" class="ep-product-img">
                             <i class="bi bi-image placeholder-icon"></i>
-                            <% if (gambar != null && !gambar.isEmpty()) { %>
-                            <img src="<%= ctx %>/<%= gambar %>" alt="<%= nama %>"
+                            <% if (gambar != null && !gambar.isEmpty()) {%>
+                            <img src="<%= ctx%>/<%= gambar%>" alt="<%= nama%>"
                                  onerror="this.remove();">
-                            <% } %>
+                            <% }%>
                         </a>
                         <div class="ep-product-body">
-                            <a href="<%= detailUrl %>" class="ep-product-name-link">
-                                <p class="ep-product-name"><%= nama %></p>
+                            <a href="<%= detailUrl%>" class="ep-product-name-link">
+                                <p class="ep-product-name"><%= nama%></p>
                             </a>
                             <p class="ep-product-price">Rp<%= hargaFmt %></p>
                             <p class="ep-product-stock">Stok: <%= stok %></p>
@@ -175,18 +134,18 @@
                     </div>
                 </div>
                 <%      }
-                    } else { %>
+                } else { %>
                 <div class="col-12">
                     <div class="ep-empty">
                         <i class="bi bi-search"></i>
                         Produk tidak ditemukan.
                     </div>
                 </div>
-                <% } %>
+                <% }%>
             </div>
         </main>
 
         <!-- Bootstrap Bundle JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

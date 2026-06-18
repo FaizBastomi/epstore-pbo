@@ -58,6 +58,9 @@ public class AuthController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
+        if (username != null) {
+            username = username.replaceAll("\\s+", "").toLowerCase();
+        }
         String password = request.getParameter("password");
 
         HttpSession session = request.getSession();
@@ -82,6 +85,7 @@ public class AuthController extends HttpServlet {
 
                 session.setAttribute("username", username);
                 session.setAttribute("email", fullPembeliData != null ? fullPembeliData.getEmail() : null);
+                session.setAttribute("pembeli_id", fullPembeliData != null ? fullPembeliData.getId() : null);
                 response.sendRedirect(request.getContextPath() + "/");
             } else {
                 request.setAttribute("error", "Username atau password salah");

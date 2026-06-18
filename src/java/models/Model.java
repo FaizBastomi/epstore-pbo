@@ -44,6 +44,31 @@ public abstract class Model<E> {
         }
     }
 
+    /**
+     * Buka koneksi JDBC baru yang berdiri sendiri (tidak memakai field {@code con}
+     * milik instance). Berguna bagi subclass yang perlu menjalankan operasi
+     * tulis transaksional dengan {@link java.sql.PreparedStatement}
+     * (mis. INSERT yang membutuhkan generated key + INSERT detail dalam satu
+     * transaksi), sesuatu yang tidak didukung oleh helper insert/update bawaan.
+     *
+     * Pemanggil bertanggung jawab menutup koneksi yang dikembalikan.
+     *
+     * Driver MySQL (Connector/J) terdaftar otomatis melalui mekanisme SPI
+     * (JDBC 4+), sehingga {@code Class.forName} tidak diperlukan lagi.
+     *
+     * @return koneksi baru, atau {@code null} bila gagal.
+     */
+    protected Connection getConnection() {
+        String dbname = "epstore";
+        try {
+            return DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/" + dbname, "root", "");
+        } catch (SQLException e) {
+            message = e.getMessage();
+            return null;
+        }
+    }
+
     public void disconnect() {
         try {
             stmt.close();

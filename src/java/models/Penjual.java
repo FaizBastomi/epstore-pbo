@@ -9,22 +9,43 @@ public class Penjual extends Akun {
         this.primaryKey = "id";
     }
 
-    public void aturNamaToko(String namaToko) {
-        this.namaToko = namaToko;
-        this.update();
+    public void aturNamaToko(String namaToko, String username) {
+        Pembeli p = new Pembeli().getPembeliByUsername(username);
+        if (p != null) {
+            this.id = p.id;
+            this.namaToko = namaToko;
+            if (this.find(p.id) != null) {
+                this.update();
+            } else {
+                this.insert();
+            }
+        }
     }
 
     public Penjual getPenjualByUsername(String username) {
-        this.where("username = '" + username + "'");
-        java.util.ArrayList<Akun> res = this.get();
-        if (res != null && !res.isEmpty()) {
-            return (Penjual) res.get(0);
+        Pembeli p = new Pembeli().getPembeliByUsername(username);
+        if (p != null) {
+            Penjual penjual = (Penjual) this.find(p.id);
+            if (penjual != null) {
+                penjual.username = p.username;
+                return penjual;
+            }
         }
         return null;
     }
 
     public String getNamaToko() {
         return namaToko;
+    }
+
+    public String getId() {
+        if (this.username != null) {
+            Pembeli p = new Pembeli().getPembeliByUsername(this.username);
+            if (p != null) {
+                return p.id;
+            }
+        }
+        return this.id;
     }
 
     public void tambahProduk(String nama, String deskripsi, double harga, int stok) {

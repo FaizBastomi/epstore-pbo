@@ -1,9 +1,3 @@
-/*
-    EpStore - Buyer (Pembeli) theme
-    Created on : Jun 17, 2026
-    Catalog / Home page styling matching the UI reference (section 2).
-*/
-
 :root {
     --ep-blue: #2563eb;        /* brand blue */
     --ep-blue-dark: #1d4ed8;
@@ -697,4 +691,181 @@ body {
 }
 .ep-cart-add-form .ep-btn-cart {
     margin-top: 0;
+}
+
+
+/* =====================================================================
+   PESANAN SAYA (UI Reference sec. 5) + PEMBAYARAN (dummy)
+   ===================================================================== */
+
+/* ---------- Tab filter status ---------- */
+.ep-order-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: 1.25rem;
+}
+.ep-order-tab {
+    border: 1px solid var(--ep-border);
+    background: #fff;
+    color: var(--ep-text);
+    border-radius: 8px;
+    padding: .4rem 1rem;
+    font-size: .85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .15s ease;
+}
+.ep-order-tab:hover {
+    border-color: var(--ep-blue);
+    color: var(--ep-blue);
+}
+.ep-order-tab.active {
+    background: var(--ep-blue);
+    border-color: var(--ep-blue);
+    color: #fff;
+}
+
+/* ---------- Order card ---------- */
+.ep-order-card {
+    background: #fff;
+    border: 1px solid var(--ep-border);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1rem;
+}
+.ep-order-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .55rem;
+}
+.ep-order-id {
+    font-weight: 700;
+    font-size: 1rem;
+}
+.ep-order-date {
+    color: var(--ep-muted);
+    font-size: .85rem;
+}
+.ep-order-products {
+    color: #374151;
+    font-size: .92rem;
+    margin-bottom: .85rem;
+}
+.ep-order-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .75rem;
+    border-top: 1px solid var(--ep-border);
+    padding-top: .85rem;
+}
+.ep-order-total {
+    font-size: .92rem;
+    color: var(--ep-text);
+}
+.ep-order-total strong {
+    font-weight: 800;
+}
+.ep-order-actions {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+/* ---------- Status badge ---------- */
+.ep-status-badge {
+    display: inline-block;
+    font-size: .75rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: .3rem .8rem;
+    white-space: nowrap;
+}
+.ep-status-menunggu {
+    background: #fef3c7;
+    color: #b45309;
+}
+.ep-status-diproses {
+    background: #ffedd5;
+    color: var(--ep-orange-dark);
+}
+.ep-status-dikirim {
+    background: #dbeafe;
+    color: var(--ep-blue-dark);
+}
+.ep-status-selesai {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+/* ---------- Secondary action button on order card ---------- */
+.ep-btn-order {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    border: 1px solid var(--ep-border);
+    background: #fff;
+    color: var(--ep-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .85rem;
+    border-radius: 8px;
+    padding: .4rem 1rem;
+    transition: all .15s ease;
+}
+.ep-btn-order:hover {
+    border-color: var(--ep-blue);
+    color: var(--ep-blue);
+}
+
+/* ---------- Payment page ---------- */
+.ep-pay-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+.ep-pay-order-id {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+.ep-pay-method {
+    color: var(--ep-muted);
+    font-size: .88rem;
+    margin-top: .15rem;
+}
+
+.ep-btn-pay-success,
+.ep-btn-pay-wait {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .45rem;
+    border: none;
+    font-weight: 700;
+    font-size: .92rem;
+    border-radius: 8px;
+    padding: .75rem;
+    transition: background .15s ease;
+}
+.ep-btn-pay-success {
+    background: #16a34a;
+    color: #fff;
+}
+.ep-btn-pay-success:hover {
+    background: #15803d;
+    color: #fff;
+}
+.ep-btn-pay-wait {
+    background: #fff;
+    color: var(--ep-text);
+    border: 1px solid var(--ep-border);
+}
+.ep-btn-pay-wait:hover {
+    border-color: var(--ep-orange);
+    color: var(--ep-orange-dark);
 }

@@ -1,4 +1,4 @@
--- =====================================================================
+ulasan-- =====================================================================
 --  EpStore - Tabel Ulasan (Review Produk)
 --  Copy-paste ke database `epstore`. Jalankan SETELAH produk.sql.
 --

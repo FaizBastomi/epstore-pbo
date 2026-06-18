@@ -13,8 +13,6 @@ import java.sql.Date;
  * Transaksi module is not built yet, this model links reviews directly to a
  * product via `produk_id`, and adds `nama_pembeli` + `tanggal` for display.
  * Reconcile with Transaksi when that module is implemented.
- *
- * @author voliya
  */
 public class Ulasan extends Model<Ulasan> {
 

@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-/**
- *
- * @author voliya
- */
 public class Akun extends Model<Akun> {
 
     protected String id;
@@ -42,6 +34,10 @@ public class Akun extends Model<Akun> {
     public void gantiPassword(String newPasswd) {
         this.password = newPasswd;
         this.update();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getEmail() {

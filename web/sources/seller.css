@@ -1,0 +1,328 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f4f6f9;
+}
+
+.seller-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.seller-sidebar {
+    width: 280px;
+    background-color: #ffffff;
+    border-right: 1px solid #e3e6f0;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    border-bottom: 1px solid #f8f9fc;
+}
+
+.sidebar-header .badge {
+    background-color: #137333 !important;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+.sidebar-nav {
+    padding: 15px 15px;
+}
+
+.sidebar-nav .nav-item {
+    margin-bottom: 8px;
+}
+
+.sidebar-nav .nav-link {
+    color: #5a5c69;
+    padding: 12px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar-nav .nav-link:hover {
+    background-color: #f8f9fc;
+    color: #137333;
+}
+
+.sidebar-nav .nav-link.active {
+    background: linear-gradient(135deg, rgba(19, 115, 51, 0.12), rgba(19, 115, 51, 0.04));
+    color: #137333;
+    font-weight: 600;
+}
+
+.sidebar-nav .nav-link i {
+    font-size: 1.25rem;
+}
+
+.seller-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Topbar */
+.seller-topbar {
+    height: 70px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 30px;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* Notification icon */
+.topbar-icon {
+    color: #5a5c69;
+    font-size: 1.4rem;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.topbar-icon .badge-counter {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 50%;
+    background-color: #dc3545;
+}
+
+.mode-pembeli-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #5a5c69;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease-in-out;
+}
+
+.mode-pembeli-btn:hover {
+    color: #137333;
+}
+
+/* Dashboard Content */
+.dashboard-main {
+    padding: 30px;
+}
+
+.dashboard-title {
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 25px;
+    font-size: 1.75rem;
+}
+
+/* Summary cards */
+.summary-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.04);
+    transition: transform 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+}
+
+.summary-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.summary-card-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0;
+}
+
+/* Table card */
+.table-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.04);
+    overflow: hidden;
+    margin-top: 30px;
+}
+
+.table-card-header {
+    padding: 20px 24px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f8f9fc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.table-card-title {
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 0;
+    font-size: 1.1rem;
+}
+
+.table-card-body {
+    padding: 24px;
+}
+
+/* Custom Status Badges */
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    border: none;
+}
+
+.status-diproses {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-dikirim {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+.status-baru {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.btn-see-all {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #0d6efd;
+}
+
+.btn-see-all:hover {
+    text-decoration: underline;
+}
+
+/* Onboarding / Store Creation Page */
+.create-store-body {
+    background-color: #f8f9fc;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.create-store-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.create-store-card h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2e384d;
+    margin-bottom: 10px;
+}
+
+.create-store-card p {
+    color: #8798ad;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+}
+
+.create-store-card .form-control {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    font-size: 1rem;
+}
+
+.create-store-card .form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.1);
+}
+
+.create-store-card .btn-primary {
+    background-color: #4e73df;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 20px;
+    transition: all 0.2s;
+}
+
+.create-store-card .btn-primary:hover {
+    background-color: #2e59d9;
+    transform: translateY(-2px);
+}
+
+.create-store-card .back-link {
+    display: block;
+    margin-top: 20px;
+    color: #8798ad;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.create-store-card .back-link:hover {
+    color: #4e73df;
+}
+
+/* General Seller Styling */
+.btn-seller-primary {
+    background-color: #137333;
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-seller-primary:hover {
+    background-color: #0e5a27;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.seller-content .form-control {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid #d1d3e2;
+    font-size: 0.95rem;
+    color: #495057;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.seller-content .form-control:focus {
+    border-color: #137333;
+    box-shadow: 0 0 0 0.2rem rgba(19, 115, 51, 0.15);
+}
