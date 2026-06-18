@@ -58,6 +58,9 @@ public class AuthController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
+        if (username != null) {
+            username = username.replaceAll("\\s+", "").toLowerCase();
+        }
         String password = request.getParameter("password");
 
         HttpSession session = request.getSession();

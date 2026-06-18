@@ -18,9 +18,8 @@ import models.Ulasan;
 /**
  * Serves the product detail page (UI Reference sec. 3).
  *
- * @author voliya
  */
-@WebServlet(name = "ProductController", urlPatterns = {"/produk"})
+@WebServlet(name = "ProductController", urlPatterns = { "/produk" })
 public class ProductController extends HttpServlet {
 
     @Override
