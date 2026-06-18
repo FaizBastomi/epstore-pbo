@@ -1,22 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
 import java.sql.Date;
 
-/**
- * Ulasan (review) for a product.
- *
- * NOTE: In the Class Diagram, Ulasan is composed with Transaksi. Since the
- * Transaksi module is not built yet, this model links reviews directly to a
- * product via `produk_id`, and adds `nama_pembeli` + `tanggal` for display.
- * Reconcile with Transaksi when that module is implemented.
- */
 public class Ulasan extends Model<Ulasan> {
 
-    // Field names MUST match column names in table `ulasan`.
     private int id, produk_id, rating;
     private String komentar, nama_pembeli;
     private Date tanggal;

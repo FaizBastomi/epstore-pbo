@@ -1,15 +1,6 @@
-<%-- 
-    Document   : index (Buyer Home / Katalog Produk)
-    Created on : Jun 17, 2026
-    Author     : Kelompok 5
-    Description: Halaman utama pembeli - katalog produk (UI Reference sec. 2).
-                 Data produk diambil dari database via BuyerController
-                 (request attribute "produkList"), bukan hardcoded.
---%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Locale"%>
 <%@page import="models.Produk"%>
-<%@page import="models.Keranjang"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
@@ -19,13 +10,6 @@
         return;
     }
     String ctx = request.getContextPath();
-
-    // Jumlah item keranjang (untuk badge) dari session.
-    Keranjang keranjang = (Keranjang) ses.getAttribute("keranjang");
-    int cartCount = (keranjang != null) ? keranjang.getTotalItem() : 0;
-
-    // Data dari BuyerController (DB-based). Bisa null jika JSP diakses langsung
-    // tanpa melalui /buyer -> perlakukan sebagai katalog kosong.
     @SuppressWarnings("unchecked")
     List<Produk> produkList = (List<Produk>) request.getAttribute("produkList");
 
@@ -119,15 +103,15 @@
                             <a href="<%= detailUrl%>" class="ep-product-name-link">
                                 <p class="ep-product-name"><%= nama%></p>
                             </a>
-                            <p class="ep-product-price">Rp<%= hargaFmt %></p>
-                            <p class="ep-product-stock">Stok: <%= stok %></p>
-                            <form method="post" action="<%= ctx %>/buyer/cart" class="ep-cart-add-form">
+                            <p class="ep-product-price">Rp<%= hargaFmt%></p>
+                            <p class="ep-product-stock">Stok: <%= stok%></p>
+                            <form method="post" action="<%= ctx%>/buyer/cart" class="ep-cart-add-form">
                                 <input type="hidden" name="action" value="add">
-                                <input type="hidden" name="produkId" value="<%= id %>">
+                                <input type="hidden" name="produkId" value="<%= id%>">
                                 <input type="hidden" name="qty" value="1">
-                                <button type="submit" class="ep-btn-cart" <%= stok == 0 ? "disabled" : "" %>>
+                                <button type="submit" class="ep-btn-cart" <%= stok == 0 ? "disabled" : ""%>>
                                     <i class="bi bi-cart-plus"></i>
-                                    <%= stok == 0 ? "Stok Habis" : "Tambah ke Keranjang" %>
+                                    <%= stok == 0 ? "Stok Habis" : "Tambah ke Keranjang"%>
                                 </button>
                             </form>
                         </div>
