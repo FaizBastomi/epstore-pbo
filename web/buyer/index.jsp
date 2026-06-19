@@ -72,8 +72,12 @@
             <!-- Product grid -->
             <div class="row g-3 g-md-4">
                 <%
+                    String currentBuyerId = (String) ses.getAttribute("pembeli_id");
                     if (produkList != null && !produkList.isEmpty()) {
                         for (Produk p : produkList) {
+                            if (currentBuyerId != null && currentBuyerId.equals(p.getPenjualId())) {
+                                continue;
+                            }
                             int id = p.getId();
                             String nama = p.getNama();
                             int stok = p.getStok();
