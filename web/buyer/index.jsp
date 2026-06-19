@@ -10,7 +10,9 @@
         return;
     }
     String ctx = request.getContextPath();
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(
+    
+    "unchecked")
     List<Produk> produkList = (List<Produk>) request.getAttribute("produkList");
 
     String activeKategori = (String) request.getAttribute("activeKategori");
@@ -73,11 +75,13 @@
             <div class="row g-3 g-md-4">
                 <%
                     String currentBuyerId = (String) ses.getAttribute("pembeli_id");
+                    boolean hasVisibleProducts = false;
                     if (produkList != null && !produkList.isEmpty()) {
                         for (Produk p : produkList) {
                             if (currentBuyerId != null && currentBuyerId.equals(p.getPenjualId())) {
                                 continue;
                             }
+                            hasVisibleProducts = true;
                             int id = p.getId();
                             String nama = p.getNama();
                             int stok = p.getStok();
@@ -113,7 +117,8 @@
                     </div>
                 </div>
                 <%      }
-                } else { %>
+                    }
+                    if (!hasVisibleProducts) { %>
                 <div class="col-12">
                     <div class="ep-empty">
                         <i class="bi bi-search"></i>
