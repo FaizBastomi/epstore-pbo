@@ -5,6 +5,7 @@
 <%@page import="models.Produk"%>
 <%@page import="models.EWallet"%>
 <%@page import="models.TransferBank"%>
+<%@page import="models.Kupon"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%!
@@ -39,6 +40,13 @@
 
     List<TransferBank> banks = new TransferBank().get();
     List<EWallet> wallets = new EWallet().get();
+
+    Kupon appliedKupon = (Kupon) ses.getAttribute("appliedKupon");
+    double discount = 0;
+    if (appliedKupon != null) {
+        discount = appliedKupon.hitungPotongan(total);
+    }
+    double finalTotal = total - discount;
 
     // Pesan info (mis. dari aksi checkout yang belum tersedia).
     String info = (String) ses.getAttribute("cartInfo");
@@ -313,9 +321,33 @@
                     <!-- Ringkasan Pembayaran -->
                     <div class="col-lg-5">
                         <div class="ep-summary-card">
-                            <div class="ep-summary-row">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.85rem;">Kupon Promo</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="couponCode" placeholder="Masukkan kode promo" 
+                                           value="<%= appliedKupon != null ? esc(appliedKupon.getKodePromo()) : "" %>"
+                                           <%= appliedKupon != null ? "readonly" : "" %>>
+                                    <% if (appliedKupon == null) { %>
+                                        <button class="btn btn-outline-primary" type="submit" name="applyCoupon" value="1" formaction="<%= ctx%>/buyer/cart">Apply</button>
+                                    <% } else { %>
+                                        <button class="btn btn-outline-danger" type="submit" name="removeCoupon" value="1" formaction="<%= ctx%>/buyer/cart">Batal</button>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <hr class="my-3">
+                            <% if (appliedKupon != null) { %>
+                                <div class="ep-summary-row" style="font-size: 0.95rem;">
+                                    <span>Total Awal</span>
+                                    <span class="text-secondary"><%= rp(total) %></span>
+                                </div>
+                                <div class="ep-summary-row text-success mb-2" style="font-size: 0.95rem;">
+                                    <span>Potongan (<%= String.format("%.0f", appliedKupon.getPersenDiskon()) %>%)</span>
+                                    <span>- <%= rp(discount) %></span>
+                                </div>
+                            <% } %>
+                            <div class="ep-summary-row mb-3">
                                 <span>Total Pembayaran</span>
-                                <span class="ep-summary-total"><%= rp(total)%></span>
+                                <span class="ep-summary-total"><%= rp(finalTotal)%></span>
                             </div>
                             <button type="submit" class="ep-btn-checkout">Checkout</button>
                         </div>

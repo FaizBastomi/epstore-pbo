@@ -4,60 +4,23 @@ import java.util.Date;
 
 public class Kupon extends Model<Kupon> {
 
-    private int id;
-    private String kodePromo;
-    private double persenDiskon;
-    private Date expireAt;
+    public String kode_promo;
+    public double persen_diskon;
+    public Date expire_at;
 
     public Kupon() {
         this.table = "kupon";
-        this.primaryKey = "id";
+        this.primaryKey = "kode_promo";
     }
 
+    public String getKodePromo() { return kode_promo; }
+    public double getPersenDiskon() { return persen_diskon; }
+
     public Double hitungPotongan(Double harga) {
-        if (harga == null) {
-            return 0.0;
-        }
-        return harga * (persenDiskon / 100.0);
+        return harga == null ? 0.0 : harga * (persen_diskon / 100.0);
     }
 
     public boolean cekMasaBerlaku() {
-        if (expireAt == null) {
-            return true; // Asumsi jika tidak ada expireAt, maka selalu berlaku
-        }
-        Date currentDate = new Date();
-        return currentDate.before(expireAt) || currentDate.equals(expireAt);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getKodePromo() {
-        return kodePromo;
-    }
-
-    public void setKodePromo(String kodePromo) {
-        this.kodePromo = kodePromo;
-    }
-
-    public double getPersenDiskon() {
-        return persenDiskon;
-    }
-
-    public void setPersenDiskon(double persenDiskon) {
-        this.persenDiskon = persenDiskon;
-    }
-
-    public Date getExpireAt() {
-        return expireAt;
-    }
-
-    public void setExpireAt(Date expireAt) {
-        this.expireAt = expireAt;
+        return expire_at == null || !new Date().after(expire_at);
     }
 }

@@ -35,13 +35,21 @@ public class Transaksi extends Model<Transaksi> {
         return list != null ? list : new ArrayList<>();
     }
 
-    public int buatPesanan(Keranjang keranjang, String pembeliId, String metode) {
+    public int buatPesanan(Keranjang keranjang, String pembeliId, String metode, String couponCode) {
         this.pembeli_id = keranjang.getIdPembeli();
         this.metode = metode;
         this.tanggal = LocalDateTime.now();
         this.status_pembayaran = 0;
         this.status = "Menunggu Pembayaran";
-        this.total_harga = keranjang.getTotalHarga();
+        
+        double total = keranjang.getTotalHarga();
+        if (couponCode != null && !couponCode.trim().isEmpty()) {
+            Kupon k = new Kupon().find(couponCode.trim());
+            if (k != null && k.cekMasaBerlaku()) {
+                total -= k.hitungPotongan(total);
+            }
+        }
+        this.total_harga = total;
         this.insert();
         
         Transaksi t = new Transaksi();

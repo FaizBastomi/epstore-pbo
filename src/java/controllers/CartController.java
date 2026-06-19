@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import models.BarangKeranjang;
 import models.Keranjang;
 import models.Transaksi;
+import models.Kupon;
 
 @WebServlet(name = "CartController", urlPatterns = {"/buyer/cart", "/buyer/checkout"})
 public class CartController extends HttpServlet {
@@ -58,14 +59,36 @@ public class CartController extends HttpServlet {
         if ("/buyer/checkout".equals(request.getServletPath())) {
             if (!cart.isEmpty()) {
                 Transaksi t = new Transaksi();
-                int id = t.buatPesanan(cart, cart.getIdPembeli(), request.getParameter("metode"));
+                String code = request.getParameter("couponCode");
+                int id = t.buatPesanan(cart, cart.getIdPembeli(), request.getParameter("metode"), code);
                 if (id > 0) {
                     cart.kosongkanKeranjang();
+                    request.getSession().removeAttribute("appliedKupon");
                     response.sendRedirect(request.getContextPath() + "/buyer/payment?id=" + id);
                     return;
                 }
                 request.getSession().setAttribute("error", t.getMessage());
             }
+            response.sendRedirect(request.getContextPath() + "/buyer/cart");
+            return;
+        }
+
+        if (request.getParameter("applyCoupon") != null) {
+            String code = request.getParameter("couponCode");
+            if (code != null && !code.trim().isEmpty()) {
+                Kupon kupon = new Kupon().find(code.trim());
+                if (kupon != null && kupon.cekMasaBerlaku()) {
+                    request.getSession().setAttribute("appliedKupon", kupon);
+                } else {
+                    request.getSession().setAttribute("error", "Kupon tidak valid atau sudah kedaluwarsa.");
+                }
+            }
+            response.sendRedirect(request.getContextPath() + "/buyer/cart");
+            return;
+        }
+
+        if (request.getParameter("removeCoupon") != null) {
+            request.getSession().removeAttribute("appliedKupon");
             response.sendRedirect(request.getContextPath() + "/buyer/cart");
             return;
         }
