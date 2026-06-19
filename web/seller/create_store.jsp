@@ -16,7 +16,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         
         <!-- Bootstrap 5 CSS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         
         <!-- Custom CSS -->
         <link href="<%= ctx %>/sources/seller.css" rel="stylesheet">
@@ -38,10 +38,12 @@
                     <label for="namaToko" class="form-label fw-bold" style="color: #4a5568;">Nama Toko</label>
                     <input type="text" class="form-control" id="namaToko" name="namaToko" placeholder="Contoh: EpStore Official" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Mulai Berjualan</button>
+                <button type="submit" class="btn btn-primary w-100 mt-3">Mulai Berjualan</button>
             </form>
             
             <a href="<%= ctx %>/buyer" class="back-link">Kembali ke Mode Pembeli</a>
         </div>
+        <!-- Bootstrap 5 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

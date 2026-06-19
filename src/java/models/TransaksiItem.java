@@ -1,40 +1,25 @@
 package models;
 
-/**
- * TransaksiItem - satu baris item di dalam sebuah {@link Transaksi}.
- *
- * Merupakan perwujudan basis data dari relasi Komposisi
- * Transaksi -- BarangKeranjang (Class Diagram bagian D, atribut
- * {@code daftarItem: ArrayList<BarangKeranjang>}). Nama & harga produk
- * disimpan sebagai snapshot agar riwayat pesanan tetap utuh meskipun produk
- * di katalog kelak berubah/terhapus.
- *
- * Field names MUST match column names in table `transaksi_item`
- * (pemetaan berbasis reflection pada {@link Model}).
- *
- * @author Kelompok 5
- */
 public class TransaksiItem extends Model<TransaksiItem> {
-
-    private int id, transaksi_id, produk_id, qty;
+    private int id;
+    private int transaksi_id;
+    private int produk_id;
     private String nama_produk;
     private double harga;
+    private int qty;
 
     public TransaksiItem() {
         this.table = "transaksi_item";
         this.primaryKey = "id";
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public int getTransaksiId() {
-        return transaksi_id;
-    }
-
-    public int getProdukId() {
-        return produk_id;
+    public TransaksiItem(int transaksi_id, int produk_id, String nama_produk, double harga, int qty) {
+        this();
+        this.transaksi_id = transaksi_id;
+        this.produk_id = produk_id;
+        this.nama_produk = nama_produk;
+        this.harga = harga;
+        this.qty = qty;
     }
 
     public String getNamaProduk() {
@@ -49,9 +34,6 @@ public class TransaksiItem extends Model<TransaksiItem> {
         return qty;
     }
 
-    /**
-     * Subtotal baris = harga snapshot * kuantitas.
-     */
     public double getSubtotal() {
         return harga * qty;
     }

@@ -105,8 +105,7 @@
                             </a>
                             <p class="ep-product-price">Rp<%= hargaFmt%></p>
                             <p class="ep-product-stock">Stok: <%= stok%></p>
-                            <form method="post" action="<%= ctx%>/buyer/cart" class="ep-cart-add-form">
-                                <input type="hidden" name="action" value="add">
+                            <form method="post" action="<%= ctx%>/buyer/cart?add" class="ep-cart-add-form">
                                 <input type="hidden" name="produkId" value="<%= id%>">
                                 <input type="hidden" name="qty" value="1">
                                 <button type="submit" class="ep-btn-cart" <%= stok == 0 ? "disabled" : ""%>>

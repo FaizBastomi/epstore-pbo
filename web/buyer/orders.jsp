@@ -1,9 +1,8 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Locale"%>
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="models.Transaksi"%>
 <%@page import="models.TransaksiItem"%>
-<%@page import="models.Keranjang"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%!
@@ -44,9 +43,6 @@
     }
     String ctx = request.getContextPath();
 
-    Keranjang keranjang = (Keranjang) ses.getAttribute("keranjang");
-    int cartCount = (keranjang != null) ? keranjang.getTotalItem() : 0;
-
     @SuppressWarnings("unchecked")
     List<Transaksi> pesananList = (List<Transaksi>) request.getAttribute("pesananList");
 
@@ -57,7 +53,7 @@
 
     String[] tabs = {"Semua", "Menunggu Pembayaran", "Diproses", "Dikirim", "Selesai"};
 
-    SimpleDateFormat tglFmt = new SimpleDateFormat("d MMM yyyy", new Locale("id", "ID"));
+    DateTimeFormatter tglFmt = DateTimeFormatter.ofPattern("d MMM yyyy", new Locale("id", "ID"));
 
     // Pesan info (mis. hasil dari halaman pembayaran).
     String info = (String) ses.getAttribute("orderInfo");
@@ -83,32 +79,7 @@
     <body>
 
         <!-- ===================== TOP NAVBAR ===================== -->
-        <nav class="ep-navbar">
-            <div class="container py-2">
-                <div class="d-flex align-items-center justify-content-between">
-                    <a href="<%= ctx %>/buyer" class="ep-brand">
-                        <i class="bi bi-bag-fill"></i> EpStore
-                    </a>
-                    <div class="d-flex align-items-center gap-4">
-                        <a href="<%= ctx %>/buyer" class="ep-nav-action">Home</a>
-                        <a href="<%= ctx %>/buyer/cart" class="ep-nav-action">
-                            <span class="position-relative">
-                                <i class="bi bi-cart3 fs-5"></i>
-                                <% if (cartCount > 0) { %>
-                                <span class="ep-cart-badge"><%= cartCount %></span>
-                                <% } %>
-                            </span>
-                            Keranjang
-                        </a>
-                        <a href="<%= ctx %>/buyer/orders" class="ep-nav-action active">Pesanan Saya</a>
-                        <a href="<%= ctx %>/buyer/reviews" class="ep-nav-action">Ulasan</a>
-                        <a href="<%= ctx %>/auth?logout" class="ep-nav-action">
-                            <i class="bi bi-box-arrow-right"></i> Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="components/navbar.jsp" />
 
         <!-- ===================== CONTENT ===================== -->
         <main class="container py-4" style="max-width: 900px;">
@@ -147,12 +118,12 @@
                    for (Transaksi t : pesananList) {
                        List<TransaksiItem> items = t.getDaftarItem();
                        String status = t.getStatus();
-                       String tanggal = (t.getTanggal() != null) ? tglFmt.format(t.getTanggal()) : "-";
+                       String tanggal = (t.getTanggal() != null) ? t.getTanggal().format(tglFmt) : "-";
             %>
             <div class="ep-order-card">
                 <!-- Header: nomor order + tanggal -->
                 <div class="ep-order-head">
-                    <span class="ep-order-id">Order #<%= String.format("%03d", t.getIdTransaksi()) %></span>
+                    <span class="ep-order-id">Order #<%= String.format("%03d", t.getId()) %></span>
                     <span class="ep-order-date"><%= tanggal %></span>
                 </div>
 
@@ -165,13 +136,13 @@
                     <div class="ep-order-actions">
                         <span class="ep-status-badge <%= badgeClass(status) %>"><%= esc(status) %></span>
                         <% if ("Menunggu Pembayaran".equals(status)) { %>
-                        <a href="<%= ctx %>/buyer/payment?id=<%= t.getIdTransaksi() %>" class="ep-btn-order">
+                        <a href="<%= ctx %>/buyer/payment?id=<%= t.getId() %>" class="ep-btn-order">
                             Bayar Sekarang
                         </a>
                         <% } else if ("Selesai".equals(status)) { %>
                         <a href="<%= ctx %>/buyer/reviews" class="ep-btn-order">Beri Ulasan</a>
                         <% } else { %>
-                        <a href="<%= ctx %>/buyer/payment?id=<%= t.getIdTransaksi() %>" class="ep-btn-order">
+                        <a href="<%= ctx %>/buyer/payment?id=<%= t.getId() %>" class="ep-btn-order">
                             Lihat Detail
                         </a>
                         <% } %>

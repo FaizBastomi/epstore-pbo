@@ -84,12 +84,12 @@ public class PaymentController extends HttpServlet {
             // Polymorphism: pilih implementasi Payable sesuai metode transaksi.
             Payable metodeBayar = buatMetodeBayar(transaksi.getMetode());
             boolean berhasil = metodeBayar.prosesBayar(transaksi.getTotalHarga());
-            transaksi.update_status_pembayaran(berhasil);
+            transaksi.updateStatusPembayaran(berhasil);
             session.setAttribute("orderInfo", berhasil
                     ? "Pembayaran berhasil. Pesanan kamu sedang diproses."
                     : "Pembayaran gagal diproses. Silakan coba lagi.");
         } else if ("waiting".equals(action)) {
-            transaksi.update_status_pembayaran(false);
+            transaksi.updateStatusPembayaran(false);
             session.setAttribute("orderInfo",
                     "Pesanan disimpan dengan status Menunggu Pembayaran.");
         }
