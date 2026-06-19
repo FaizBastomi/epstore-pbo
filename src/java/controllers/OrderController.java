@@ -41,6 +41,22 @@ public class OrderController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+        String action = req.getParameter("action");
+        if ("complete".equals(action)) {
+            String idStr = req.getParameter("id");
+            if (idStr != null) {
+                try {
+                    Transaksi t = new Transaksi().find(idStr.trim());
+                    HttpSession s = req.getSession(false);
+                    if (t != null && s != null && t.getPembeliId().equals(s.getAttribute("pembeli_id"))) {
+                        t.updateStatus("Selesai");
+                        s.setAttribute("orderInfo", "Pesanan telah selesai. Terima kasih!");
+                    }
+                } catch (Exception ignored) {}
+            }
+            res.sendRedirect(req.getContextPath() + "/buyer/orders");
+            return;
+        }
         doGet(req, res);
     }
 }

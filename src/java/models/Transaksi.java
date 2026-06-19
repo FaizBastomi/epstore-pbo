@@ -67,6 +67,16 @@ public class Transaksi extends Model<Transaksi> {
         return newId;
     }
 
+    public void kurangiStok() {
+        for (TransaksiItem item : getDaftarItem()) {
+            Produk p = new Produk().find(item.getProdukId() + "");
+            if (p != null) {
+                p.setStok(p.getStok() - item.getQty());
+                p.update();
+            }
+        }
+    }
+
     public void updateStatus(String newStatus) {
         this.status = newStatus;
         this.update();
@@ -75,7 +85,7 @@ public class Transaksi extends Model<Transaksi> {
     public void updateStatusPembayaran(boolean isPaid) {
         this.status_pembayaran = isPaid ? 1 : 0;
         if (isPaid && "Menunggu Pembayaran".equals(this.status)) {
-            this.status = "Diproses";
+            this.status = "Dibayar";
         }
         this.update();
     }

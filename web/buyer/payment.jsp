@@ -70,7 +70,15 @@
                             <i class="bi bi-credit-card"></i> <%= esc(transaksi.getMetode())%>
                         </div>
                     </div>
-                    <span class="ep-status-badge ep-status-menunggu">
+                    <%
+                        String badgeCls = "ep-status-menunggu";
+                        String st = transaksi.getStatus();
+                        if ("Diproses".equals(st)) badgeCls = "ep-status-diproses";
+                        else if ("Dibayar".equals(st)) badgeCls = "ep-status-dibayar";
+                        else if ("Dikirim".equals(st)) badgeCls = "ep-status-dikirim";
+                        else if ("Selesai".equals(st)) badgeCls = "ep-status-selesai";
+                    %>
+                    <span class="ep-status-badge <%= badgeCls %>">
                         <%= esc(transaksi.getStatus())%>
                     </span>
                 </div>
@@ -105,6 +113,7 @@
             </div>
 
             <!-- ===================== TOMBOL PEMBAYARAN (DUMMY) ===================== -->
+            <% if ("Menunggu Pembayaran".equals(transaksi.getStatus())) { %>
             <div class="ep-cart-card">
                 <h2 class="ep-section-title">Konfirmasi Pembayaran</h2>
                 
@@ -140,6 +149,7 @@
                     </div>
                 </div>
             </div>
+            <% } %>
 
         </main>
 

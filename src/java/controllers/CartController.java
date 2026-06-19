@@ -12,6 +12,7 @@ import models.BarangKeranjang;
 import models.Keranjang;
 import models.Transaksi;
 import models.Kupon;
+import models.Produk;
 
 @WebServlet(name = "CartController", urlPatterns = {"/buyer/cart", "/buyer/checkout"})
 public class CartController extends HttpServlet {
@@ -95,14 +96,23 @@ public class CartController extends HttpServlet {
 
         try {
             int produkId = Integer.parseInt(request.getParameter("produkId"));
+            Produk p = new Produk().find(String.valueOf(produkId));
+            if (p == null) throw new Exception("Produk tidak ditemukan.");
+            
             if (request.getParameter("add") != null) {
                 int qty = request.getParameter("qty") != null ? Integer.parseInt(request.getParameter("qty")) : 1;
+                models.BarangKeranjang bk = cart.getItem(produkId);
+                if ((bk != null ? bk.getQty() : 0) + qty > p.getStok()) throw new Exception("Stok tidak mencukupi.");
                 cart.tambahItem(produkId, qty);
             } else if (request.getParameter("remove") != null) {
                 cart.hapusItem(produkId);
             } else if (request.getParameter("inc") != null || request.getParameter("dec") != null) {
-                BarangKeranjang bk = cart.getItem(produkId);
-                if (bk != null) cart.ubahQty(produkId, bk.getQty() + (request.getParameter("inc") != null ? 1 : -1));
+                models.BarangKeranjang bk = cart.getItem(produkId);
+                if (bk != null) {
+                    int newQty = bk.getQty() + (request.getParameter("inc") != null ? 1 : -1);
+                    if (newQty > p.getStok()) throw new Exception("Stok tidak mencukupi.");
+                    cart.ubahQty(produkId, newQty);
+                }
             }
         } catch (Exception e) {
             request.getSession().setAttribute("error", e.getMessage());

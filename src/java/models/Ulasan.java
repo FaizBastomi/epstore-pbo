@@ -5,7 +5,15 @@ import java.sql.Date;
 public class Ulasan extends Model<Ulasan> {
 
     private int id, produk_id, rating;
-    private String komentar, nama_pembeli;
+    private String komentar, nama_pembeli, seller_reply;
+
+    public String getSellerReply() {
+        return seller_reply;
+    }
+
+    public void setSellerReply(String seller_reply) {
+        this.seller_reply = seller_reply;
+    }
     private Date tanggal;
 
     public Ulasan() {

@@ -173,6 +173,15 @@
                             <span class="ep-review-date"><%= tgl%></span>
                         </div>
                         <p class="ep-review-text"><%= u.getKomentar() == null ? "" : u.getKomentar()%></p>
+                        <% if (u.getSellerReply() != null && !u.getSellerReply().trim().isEmpty()) {%>
+                        <div class="mt-2 p-3 bg-light rounded border-start border-primary border-3">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <i class="bi bi-reply-fill text-primary"></i>
+                                <strong class="text-dark small">Balasan Penjual</strong>
+                            </div>
+                            <p class="mb-0 text-secondary small"><%= u.getSellerReply()%></p>
+                        </div>
+                        <% } %>
                     </div>
                 </div>
                 <%     }

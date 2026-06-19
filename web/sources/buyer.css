@@ -792,6 +792,10 @@ body {
     background: #ffedd5;
     color: var(--ep-orange-dark);
 }
+.ep-status-dibayar {
+    background: #e0f2fe;
+    color: #0369a1;
+}
 .ep-status-dikirim {
     background: #dbeafe;
     color: var(--ep-blue-dark);

@@ -22,6 +22,10 @@ public class TransaksiItem extends Model<TransaksiItem> {
         this.qty = qty;
     }
 
+    public int getProdukId() {
+        return produk_id;
+    }
+
     public String getNamaProduk() {
         return nama_produk;
     }

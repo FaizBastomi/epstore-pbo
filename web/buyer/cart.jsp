@@ -79,6 +79,8 @@
             <jsp:param name="showSearch" value="false" />
         </jsp:include>
 
+        <jsp:include page="components/submenu.jsp" />
+
         <!-- ===================== CONTENT ===================== -->
         <main class="container py-4">
 

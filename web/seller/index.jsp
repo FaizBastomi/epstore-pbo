@@ -1,45 +1,11 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Map"%>
+<%@page import="models.Transaksi"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%!
-    // Temporary Dummy Class simulating database model
-    public static class PesananDummy {
-
-        private String id;
-        private String pembeli;
-        private double total;
-        private String status;
-
-        public PesananDummy(String id, String pembeli, double total, String status) {
-            this.id = id;
-            this.pembeli = pembeli;
-            this.total = total;
-            this.status = status;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getPembeli() {
-            return pembeli;
-        }
-
-        public double getTotal() {
-            return total;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-    }
-%>
 <%
     String ctx = request.getContextPath();
-
-    // Dummy data prepared for database mapping replacement
-    java.util.List<PesananDummy> pesananList = new java.util.ArrayList<>();
-    pesananList.add(new PesananDummy("#001", "Budi", 420000, "Diproses"));
-    pesananList.add(new PesananDummy("#002", "Ani", 150000, "Dikirim"));
-    pesananList.add(new PesananDummy("#003", "Citra", 98000, "Baru"));
+    ArrayList<Transaksi> recentOrders = (ArrayList<Transaksi>) request.getAttribute("recentOrders");
+    Map<String, String> buyerNames = (Map<String, String>) request.getAttribute("buyerNames");
 %>
 <!DOCTYPE html>
 <html lang="id">
@@ -81,7 +47,7 @@
                     <div class="card table-card mt-0">
                         <div class="table-card-header">
                             <h2 class="table-card-title">Pesanan Terbaru</h2>
-                            <a href="<%= ctx%>/seller/pesanan.jsp" class="btn-see-all">Lihat Semua</a>
+                            <a href="<%= ctx%>/seller/pesanan" class="btn-see-all">Lihat Semua</a>
                         </div>
                         <div class="table-card-body p-0">
                             <div class="table-responsive">
@@ -96,22 +62,22 @@
                                     </thead>
                                     <tbody>
                                         <%
-                                            if (pesananList != null && !pesananList.isEmpty()) {
-                                                for (PesananDummy p : pesananList) {
+                                            if (recentOrders != null && !recentOrders.isEmpty()) {
+                                                for (Transaksi order : recentOrders) {
                                                     String statusClass = "";
-                                                    String status = p.getStatus();
-                                                    if ("Diproses".equalsIgnoreCase(status)) {
+                                                    String status = order.getStatus();
+                                                    if ("Diproses".equalsIgnoreCase(status) || "Selesai".equalsIgnoreCase(status)) {
                                                         statusClass = "status-diproses";
                                                     } else if ("Dikirim".equalsIgnoreCase(status)) {
                                                         statusClass = "status-dikirim";
-                                                    } else if ("Baru".equalsIgnoreCase(status)) {
+                                                    } else {
                                                         statusClass = "status-baru";
                                                     }
-                                                    String hargaFmt = String.format(java.util.Locale.US, "%,.0f", p.getTotal()).replace(',', '.');
+                                                    String hargaFmt = String.format(java.util.Locale.US, "%,.0f", order.getTotalHarga()).replace(',', '.');
                                         %>
                                         <tr>
-                                            <td class="ps-4 py-3 text-dark fw-bold"><%= p.getId()%></td>
-                                            <td class="py-3"><%= p.getPembeli()%></td>
+                                            <td class="ps-4 py-3 text-dark fw-bold">#<%= order.getId()%></td>
+                                            <td class="py-3"><%= buyerNames != null && buyerNames.containsKey(order.getPembeliId()) ? buyerNames.get(order.getPembeliId()) : order.getPembeliId()%></td>
                                             <td class="py-3">Rp<%= hargaFmt%></td>
                                             <td class="pe-4 py-3">
                                                 <span class="status-badge <%= statusClass%>"><%= status%></span>
