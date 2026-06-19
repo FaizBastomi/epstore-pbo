@@ -51,17 +51,9 @@
             <jsp:param name="keyword" value="<%= keyword%>" />
         </jsp:include>
 
-        <!-- ===================== SECONDARY MENU ===================== -->
-        <div class="ep-submenu">
-            <div class="container">
-                <div class="d-flex gap-4">
-                    <a href="<%= ctx%>/buyer" class="active">Home</a>
-                    <a href="<%= ctx%>/buyer#kategori">Kategori</a>
-                    <a href="<%= ctx%>/buyer/orders">Pesanan Saya</a>
-                    <a href="<%= ctx%>/buyer/reviews">Ulasan</a>
-                </div>
-            </div>
-        </div>
+        <jsp:include page="components/submenu.jsp">
+            <jsp:param name="active" value="home" />
+        </jsp:include>
 
         <!-- ===================== CONTENT ===================== -->
         <main class="container py-4">

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controllers;
 
 import java.io.IOException;
@@ -12,125 +8,74 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.EWallet;
-import models.Payable;
+import interfaces.Payable;
 import models.Transaksi;
 import models.TransferBank;
 
-/**
- * PaymentController - halaman pembayaran (DUMMY).
- *
- * Halaman pembayaran sesungguhnya (langkah-langkah pembayaran) akan dikerjakan
- * developer lain (modul Pembayaran). Untuk sementara halaman ini hanya
- * menampilkan ringkasan pesanan dan DUA tombol:
- * <ul>
- *   <li>"Pembayaran Berhasil" -&gt; {@code update_status_pembayaran(true)}
- *       (status pesanan menjadi "Diproses").</li>
- *   <li>"Menunggu Pembayaran" -&gt; {@code update_status_pembayaran(false)}.</li>
- * </ul>
- *
- * Demonstrasi Polymorphism: tombol "Pembayaran Berhasil" memanggil
- * {@link Payable#prosesBayar(double)} melalui implementasi yang dipilih sesuai
- * metode transaksi ({@link EWallet} atau {@link TransferBank}).
- *
- * @author Kelompok 5
- */
 @WebServlet(name = "PaymentController", urlPatterns = {"/buyer/payment"})
 public class PaymentController extends HttpServlet {
 
-    /**
-     * Tampilkan halaman pembayaran dummy untuk satu transaksi.
-     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        Transaksi t = getValidTransaksi(req, res);
+        if (t == null) return;
 
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("username") == null) {
-            response.sendRedirect(request.getContextPath() + "/auth?login");
-            return;
+        String info = "", m = t.getMetode();
+        String name = m != null && m.contains(" - ") ? m.split(" - ", 2)[1] : (m != null ? m : "-");
+        if (m != null && m.toLowerCase().contains("wallet")) {
+            EWallet w = new EWallet().getDetail(name);
+            if (w != null) info = "Nomor HP " + w.getPlatform() + ": <strong>" + w.getNomorHp() + "</strong>";
+        } else if (m != null && m.toLowerCase().contains("bank")) {
+            TransferBank b = new TransferBank().getDetail(name);
+            if (b != null) info = "No. Rekening " + b.getNamaBank() + ": <strong>" + b.getNoRekening() + "</strong>";
         }
-
-        Transaksi transaksi = findOwnedTransaksi(request, session);
-        if (transaksi == null) {
-            response.sendRedirect(request.getContextPath() + "/buyer/orders");
-            return;
-        }
-
-        request.setAttribute("transaksi", transaksi);
-        request.getRequestDispatcher("/buyer/payment.jsp").forward(request, response);
+        
+        req.setAttribute("paymentInfo", info);
+        req.setAttribute("transaksi", t);
+        req.getRequestDispatcher("/buyer/payment.jsp").forward(req, res);
     }
 
-    /**
-     * Proses penekanan tombol pembayaran (dummy).
-     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        Transaksi t = getValidTransaksi(req, res);
+        if (t == null) return;
 
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("username") == null) {
-            response.sendRedirect(request.getContextPath() + "/auth?login");
-            return;
-        }
-
-        Transaksi transaksi = findOwnedTransaksi(request, session);
-        if (transaksi == null) {
-            response.sendRedirect(request.getContextPath() + "/buyer/orders");
-            return;
-        }
-
-        String action = request.getParameter("action");
+        String action = req.getParameter("action");
         if ("success".equals(action)) {
-            // Polymorphism: pilih implementasi Payable sesuai metode transaksi.
-            Payable metodeBayar = buatMetodeBayar(transaksi.getMetode());
-            boolean berhasil = metodeBayar.prosesBayar(transaksi.getTotalHarga());
-            transaksi.updateStatusPembayaran(berhasil);
-            session.setAttribute("orderInfo", berhasil
-                    ? "Pembayaran berhasil. Pesanan kamu sedang diproses."
-                    : "Pembayaran gagal diproses. Silakan coba lagi.");
+            boolean ok = buatMetodeBayar(t.getMetode()).prosesBayar(t.getTotalHarga());
+            t.updateStatusPembayaran(ok);
+            req.getSession(false).setAttribute("orderInfo", ok ? "Pembayaran berhasil. Pesanan sedang diproses." : "Pembayaran gagal diproses. Silakan coba lagi.");
         } else if ("waiting".equals(action)) {
-            transaksi.updateStatusPembayaran(false);
-            session.setAttribute("orderInfo",
-                    "Pesanan disimpan dengan status Menunggu Pembayaran.");
+            t.updateStatusPembayaran(false);
+            req.getSession(false).setAttribute("orderInfo", "Pesanan disimpan dengan status Menunggu Pembayaran.");
         }
-
-        // PRG -> tampilkan daftar pesanan ("Pesanan Saya").
-        response.sendRedirect(request.getContextPath() + "/buyer/orders");
+        res.sendRedirect(req.getContextPath() + "/buyer/orders");
     }
 
-    /**
-     * Ambil transaksi berdasarkan parameter id dan pastikan milik pembeli yang
-     * sedang login (mencegah akses transaksi orang lain).
-     */
-    private Transaksi findOwnedTransaksi(HttpServletRequest request, HttpSession session) {
-        String idParam = request.getParameter("id");
-        int id;
-        try {
-            id = Integer.parseInt(idParam == null ? "" : idParam.trim());
-        } catch (NumberFormatException e) {
+    private Transaksi getValidTransaksi(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        HttpSession s = req.getSession(false);
+        if (s == null || s.getAttribute("username") == null) {
+            res.sendRedirect(req.getContextPath() + "/auth?login");
             return null;
         }
-
-        Transaksi transaksi = new Transaksi().find(String.valueOf(id));
-        if (transaksi == null) {
-            return null;
+        String idStr = req.getParameter("id");
+        if (idStr != null) {
+            try {
+                Transaksi t = new Transaksi().find(idStr.trim());
+                if (t != null && t.getPembeliId().equals(s.getAttribute("pembeli_id"))) return t;
+            } catch (Exception ignored) {}
         }
-
-        String pembeliId = (String) session.getAttribute("pembeli_id");
-        if (pembeliId != null && !pembeliId.equals(transaksi.getPembeliId())) {
-            return null; // bukan milik pembeli ini
-        }
-        return transaksi;
+        res.sendRedirect(req.getContextPath() + "/buyer/orders");
+        return null;
     }
 
-    /**
-     * Pabrik sederhana metode pembayaran (Polymorphism via {@link Payable}).
-     */
-    private Payable buatMetodeBayar(String metode) {
-        if (metode != null && metode.toLowerCase().contains("wallet")) {
-            return new EWallet("E-Wallet", "-");
+    private Payable buatMetodeBayar(String m) {
+        String name = m != null && m.contains(" - ") ? m.split(" - ", 2)[1] : (m != null ? m : "-");
+        if (m != null && m.toLowerCase().contains("wallet")) {
+            EWallet w = new EWallet().getDetail(name);
+            return w != null ? w : new EWallet(name, "-");
         }
-        // Default & "Transfer Bank"/"COD" -> diperlakukan sebagai transfer bank.
-        return new TransferBank("Bank", "-");
+        TransferBank b = new TransferBank().getDetail(name);
+        return b != null ? b : new TransferBank(name, "-");
     }
 }

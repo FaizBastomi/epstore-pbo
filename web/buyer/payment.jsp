@@ -61,13 +61,6 @@
 
             <h1 class="ep-page-title">Pembayaran</h1>
 
-            <!-- Catatan: halaman pembayaran ini masih dummy -->
-            <div class="alert alert-warning py-2 d-flex align-items-center gap-2">
-                <i class="bi bi-info-circle"></i>
-                <span>Halaman pembayaran ini masih berupa simulasi (dummy).
-                    Langkah pembayaran sesungguhnya akan ditambahkan kemudian.</span>
-            </div>
-
             <!-- Ringkasan pesanan -->
             <div class="ep-cart-card">
                 <div class="ep-pay-head">
@@ -114,6 +107,15 @@
             <!-- ===================== TOMBOL PEMBAYARAN (DUMMY) ===================== -->
             <div class="ep-cart-card">
                 <h2 class="ep-section-title">Konfirmasi Pembayaran</h2>
+                
+                <% String pInfo = (String) request.getAttribute("paymentInfo"); 
+                   if (pInfo != null && !pInfo.isEmpty()) { %>
+                    <div class="alert alert-info py-2 mb-3">
+                        <%= pInfo %>
+                        <br><small class="text-muted">Total Tagihan: <strong><%= rp(transaksi.getTotalHarga()) %></strong></small>
+                    </div>
+                <% } %>
+
                 <p class="text-muted mb-3" style="font-size:.9rem;">
                     Pilih salah satu untuk mensimulasikan hasil pembayaran:
                 </p>

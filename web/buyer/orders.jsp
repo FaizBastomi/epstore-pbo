@@ -78,11 +78,14 @@
 
     <body>
 
-        <!-- ===================== TOP NAVBAR ===================== -->
         <jsp:include page="components/navbar.jsp" />
 
+        <jsp:include page="components/submenu.jsp">
+            <jsp:param name="active" value="orders" />
+        </jsp:include>
+
         <!-- ===================== CONTENT ===================== -->
-        <main class="container py-4" style="max-width: 900px;">
+        <main class="container py-4">
 
             <h1 class="ep-page-title">Pesanan Saya</h1>
 

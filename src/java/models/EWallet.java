@@ -1,48 +1,35 @@
 package models;
 
-/**
- * EWallet - metode pembayaran dompet digital (Class Diagram bagian D).
- *
- * Mengimplementasikan {@link Payable}. Bersama {@link TransferBank}, kelas ini
- * mewujudkan Polymorphism: keduanya menyediakan {@code prosesBayar(double)}
- * dengan perilaku masing-masing.
- *
- * @author Kelompok 5
- */
-public class EWallet implements Payable {
+import interfaces.Payable;
+import java.util.ArrayList;
 
-    private String platform;   // mis. "OVO", "GoPay", "DANA"
-    private String nomorHp;
+public class EWallet extends Model<EWallet> implements Payable {
+    private int id;
+    private String platform;
+    private String nomor_hp;
 
     public EWallet() {
+        this.table = "ewallet";
+        this.primaryKey = "id";
     }
 
-    public EWallet(String platform, String nomorHp) {
+    public EWallet(String platform, String nomor_hp) {
+        this();
         this.platform = platform;
-        this.nomorHp = nomorHp;
+        this.nomor_hp = nomor_hp;
     }
 
-    public String getPlatform() {
-        return platform;
-    }
-
-    public void setPlatform(String platform) {
-        this.platform = platform;
-    }
-
-    public String getNomorHp() {
-        return nomorHp;
-    }
-
-    public void setNomorHp(String nomorHp) {
-        this.nomorHp = nomorHp;
-    }
-
-    /**
-     * Simulasi pelunasan melalui e-wallet. Nominal harus &gt; 0.
-     */
     @Override
     public boolean prosesBayar(double total) {
-        return total > 0;
+        return true;
     }
+
+    public EWallet getDetail(String platform) {
+        this.where("platform = '" + platform + "'");
+        ArrayList<EWallet> list = this.get();
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    public String getPlatform() { return platform; }
+    public String getNomorHp() { return nomor_hp; }
 }

@@ -1,47 +1,35 @@
 package models;
 
-/**
- * TransferBank - metode pembayaran transfer bank (Class Diagram bagian D).
- *
- * Mengimplementasikan {@link Payable}. Bersama {@link EWallet}, kelas ini
- * mewujudkan Polymorphism melalui {@code prosesBayar(double)}.
- *
- * @author Kelompok 5
- */
-public class TransferBank implements Payable {
+import interfaces.Payable;
+import java.util.ArrayList;
 
-    private String namaBank;       // mis. "BCA", "BNI", "Mandiri"
-    private String nomorRekening;
+public class TransferBank extends Model<TransferBank> implements Payable {
+    private int id;
+    private String nama_bank;
+    private String no_rekening;
 
     public TransferBank() {
+        this.table = "transfer_bank";
+        this.primaryKey = "id";
     }
 
-    public TransferBank(String namaBank, String nomorRekening) {
-        this.namaBank = namaBank;
-        this.nomorRekening = nomorRekening;
+    public TransferBank(String nama_bank, String no_rekening) {
+        this();
+        this.nama_bank = nama_bank;
+        this.no_rekening = no_rekening;
     }
 
-    public String getNamaBank() {
-        return namaBank;
-    }
-
-    public void setNamaBank(String namaBank) {
-        this.namaBank = namaBank;
-    }
-
-    public String getNomorRekening() {
-        return nomorRekening;
-    }
-
-    public void setNomorRekening(String nomorRekening) {
-        this.nomorRekening = nomorRekening;
-    }
-
-    /**
-     * Simulasi pelunasan melalui transfer bank. Nominal harus &gt; 0.
-     */
     @Override
     public boolean prosesBayar(double total) {
-        return total > 0;
+        return true;
     }
+
+    public TransferBank getDetail(String nama_bank) {
+        this.where("nama_bank = '" + nama_bank + "'");
+        ArrayList<TransferBank> list = this.get();
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    public String getNamaBank() { return nama_bank; }
+    public String getNoRekening() { return no_rekening; }
 }

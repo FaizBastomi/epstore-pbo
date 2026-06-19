@@ -10,37 +10,34 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.BarangKeranjang;
 import models.Keranjang;
-import models.Pembeli;
 import models.Transaksi;
 
 @WebServlet(name = "CartController", urlPatterns = {"/buyer/cart", "/buyer/checkout"})
 public class CartController extends HttpServlet {
 
-    private Keranjang getCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("username") == null) {
-            response.sendRedirect(request.getContextPath() + "/auth?login");
+    private Keranjang getCart(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        HttpSession s = req.getSession(false);
+        if (s == null || s.getAttribute("username") == null) {
+            res.sendRedirect(req.getContextPath() + "/auth?login");
             return null;
         }
 
-        Pembeli p = new Pembeli().getPembeliByUsername((String) session.getAttribute("username"));
-        if (p == null) {
-            return null;
-        }
+        String pId = (String) s.getAttribute("pembeli_id");
+        if (pId == null) return null;
 
         Keranjang k = new Keranjang();
-        k.where("id_pembeli = '" + p.getId() + "'");
+        k.where("id_pembeli = '" + pId + "'");
         ArrayList<Keranjang> list = k.get();
         if (list.isEmpty()) {
-            k.setIdPembeli(p.getId());
+            k.setIdPembeli(pId);
             k.setTotalHarga(0);
             k.insert();
-            k.where("id_pembeli = '" + p.getId() + "'");
+            k.where("id_pembeli = '" + pId + "'");
             list = k.get();
         }
 
         Keranjang cart = list.get(0);
-        session.setAttribute("keranjang", cart);
+        s.setAttribute("keranjang", cart);
         return cart;
     }
 
