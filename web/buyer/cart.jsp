@@ -3,6 +3,9 @@
 <%@page import="models.Keranjang"%>
 <%@page import="models.BarangKeranjang"%>
 <%@page import="models.Produk"%>
+<%@page import="models.EWallet"%>
+<%@page import="models.TransferBank"%>
+<%@page import="models.Kupon"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%!
@@ -35,6 +38,16 @@
     List<BarangKeranjang> items = keranjang.getDaftarItem();
     double total = keranjang.getTotalHarga();
 
+    List<TransferBank> banks = new TransferBank().get();
+    List<EWallet> wallets = new EWallet().get();
+
+    Kupon appliedKupon = (Kupon) ses.getAttribute("appliedKupon");
+    double discount = 0;
+    if (appliedKupon != null) {
+        discount = appliedKupon.hitungPotongan(total);
+    }
+    double finalTotal = total - discount;
+
     // Pesan info (mis. dari aksi checkout yang belum tersedia).
     String info = (String) ses.getAttribute("cartInfo");
     if (info != null) {
@@ -65,6 +78,8 @@
         <jsp:include page="components/navbar.jsp">
             <jsp:param name="showSearch" value="false" />
         </jsp:include>
+
+        <jsp:include page="components/submenu.jsp" />
 
         <!-- ===================== CONTENT ===================== -->
         <main class="container py-4">
@@ -175,24 +190,132 @@
             <!-- ===================== PAYMENT + CHECKOUT ===================== -->
             <form method="post" action="<%= ctx%>/buyer/checkout">
                 <div class="row g-4 mt-1">
-                    <!-- Metode Pembayaran -->
                     <div class="col-lg-7">
                         <div class="ep-cart-card h-100">
-                            <h2 class="ep-section-title">Metode Pembayaran</h2>
-                            <div class="ep-pay-option">
-                                <input class="form-check-input" type="radio" name="metode"
-                                       id="payTransfer" value="Transfer Bank" checked>
-                                <label class="form-check-label" for="payTransfer">Transfer Bank</label>
-                            </div>
-                            <div class="ep-pay-option">
-                                <input class="form-check-input" type="radio" name="metode"
-                                       id="payEwallet" value="E-Wallet">
-                                <label class="form-check-label" for="payEwallet">E-Wallet</label>
-                            </div>
-                            <div class="ep-pay-option">
-                                <input class="form-check-input" type="radio" name="metode"
-                                       id="payCod" value="COD">
-                                <label class="form-check-label" for="payCod">COD (Bayar di Tempat)</label>
+                            <h2 class="ep-section-title mb-3">Metode Pembayaran</h2>
+                            <%
+                                boolean hasBanks = (banks != null && !banks.isEmpty());
+                                boolean hasWallets = (wallets != null && !wallets.isEmpty());
+
+                                // Open Bank by default if it has options, or if both are empty (as fallback)
+                                boolean openBank = hasBanks || (!hasBanks && !hasWallets);
+                                String bankCollapseClass = openBank ? "show" : "";
+                                String bankButtonClass = openBank ? "" : "collapsed";
+                                String bankAriaExpanded = openBank ? "true" : "false";
+
+                                boolean openWallet = !hasBanks && hasWallets;
+                                String walletCollapseClass = openWallet ? "show" : "";
+                                String walletButtonClass = openWallet ? "" : "collapsed";
+                                String walletAriaExpanded = openWallet ? "true" : "false";
+
+                                boolean firstChecked = true;
+                            %>
+                            <div class="accordion ep-payment-accordion" id="paymentAccordion">
+                                <!-- Transfer Bank Accordion -->
+                                <div class="accordion-item border rounded-3 mb-3 overflow-hidden">
+                                    <h3 class="accordion-header" id="headingBank">
+                                        <button class="accordion-button fw-bold <%= bankButtonClass%>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBank" aria-expanded="<%= bankAriaExpanded%>" aria-controls="collapseBank">
+                                            <i class="bi bi-bank me-2 text-primary"></i> Transfer Bank
+                                        </button>
+                                    </h3>
+                                    <div id="collapseBank" class="accordion-collapse collapse <%= bankCollapseClass%>" aria-labelledby="headingBank" data-bs-parent="#paymentAccordion">
+                                        <div class="accordion-body bg-light p-3">
+                                            <%
+                                                if (banks != null && !banks.isEmpty()) {
+                                                    for (TransferBank bank : banks) {
+                                                        String val = "Transfer Bank - " + bank.getNamaBank();
+                                            %>
+                                            <label class="d-block card p-3 mb-2 ep-payment-card rounded-3 shadow-sm border" for="payBank_<%= esc(bank.getNamaBank())%>">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <input class="form-check-input mt-0" type="radio" name="metode"
+                                                               id="payBank_<%= esc(bank.getNamaBank())%>" value="<%= esc(val)%>" <%= firstChecked ? "checked" : ""%>>
+                                                        <div>
+                                                            <span class="fw-bold d-block text-dark"><%= esc(bank.getNamaBank())%></span>
+                                                            <small class="text-muted">No. Rekening: <%= esc(bank.getNoRekening())%></small>
+                                                        </div>
+                                                    </div>
+                                                    <i class="bi bi-credit-card text-secondary fs-4"></i>
+                                                </div>
+                                            </label>
+                                            <%
+                                                    firstChecked = false;
+                                                }
+                                            } else {
+                                            %>
+                                            <label class="d-block card p-3 mb-2 ep-payment-card rounded-3 shadow-sm border" for="payTransfer">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <input class="form-check-input mt-0" type="radio" name="metode"
+                                                               id="payTransfer" value="Transfer Bank" <%= firstChecked ? "checked" : ""%>>
+                                                        <div>
+                                                            <span class="fw-bold d-block text-dark">Transfer Bank</span>
+                                                            <small class="text-muted">Transfer manual</small>
+                                                        </div>
+                                                    </div>
+                                                    <i class="bi bi-credit-card text-secondary fs-4"></i>
+                                                </div>
+                                            </label>
+                                            <%
+                                                    firstChecked = false;
+                                                }
+                                            %>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- E-Wallet Accordion -->
+                                <div class="accordion-item border rounded-3 mb-3 overflow-hidden">
+                                    <h3 class="accordion-header" id="headingWallet">
+                                        <button class="accordion-button fw-bold <%= walletButtonClass%>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWallet" aria-expanded="<%= walletAriaExpanded%>" aria-controls="collapseWallet">
+                                            <i class="bi bi-wallet2 me-2 text-primary"></i> E-Wallet
+                                        </button>
+                                    </h3>
+                                    <div id="collapseWallet" class="accordion-collapse collapse <%= walletCollapseClass%>" aria-labelledby="headingWallet" data-bs-parent="#paymentAccordion">
+                                        <div class="accordion-body bg-light p-3">
+                                            <%
+                                                if (wallets != null && !wallets.isEmpty()) {
+                                                    for (EWallet wallet : wallets) {
+                                                        String val = "E-Wallet - " + wallet.getPlatform();
+                                            %>
+                                            <label class="d-block card p-3 mb-2 ep-payment-card rounded-3 shadow-sm border" for="payEwallet_<%= esc(wallet.getPlatform())%>">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <input class="form-check-input mt-0" type="radio" name="metode"
+                                                               id="payEwallet_<%= esc(wallet.getPlatform())%>" value="<%= esc(val)%>" <%= firstChecked ? "checked" : ""%>>
+                                                        <div>
+                                                            <span class="fw-bold d-block text-dark"><%= esc(wallet.getPlatform())%></span>
+                                                            <small class="text-muted">No. HP: <%= esc(wallet.getNomorHp())%></small>
+                                                        </div>
+                                                    </div>
+                                                    <i class="bi bi-phone text-secondary fs-4"></i>
+                                                </div>
+                                            </label>
+                                            <%
+                                                    firstChecked = false;
+                                                }
+                                            } else {
+                                            %>
+                                            <label class="d-block card p-3 mb-2 ep-payment-card rounded-3 shadow-sm border" for="payEwallet">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <input class="form-check-input mt-0" type="radio" name="metode"
+                                                               id="payEwallet" value="E-Wallet" <%= firstChecked ? "checked" : ""%>>
+                                                        <div>
+                                                            <span class="fw-bold d-block text-dark">E-Wallet</span>
+                                                            <small class="text-muted">E-Wallet Platform</small>
+                                                        </div>
+                                                    </div>
+                                                    <i class="bi bi-phone text-secondary fs-4"></i>
+                                                </div>
+                                            </label>
+                                            <%
+                                                    firstChecked = false;
+                                                }
+                                            %>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -200,9 +323,33 @@
                     <!-- Ringkasan Pembayaran -->
                     <div class="col-lg-5">
                         <div class="ep-summary-card">
-                            <div class="ep-summary-row">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.85rem;">Kupon Promo</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="couponCode" placeholder="Masukkan kode promo" 
+                                           value="<%= appliedKupon != null ? esc(appliedKupon.getKodePromo()) : "" %>"
+                                           <%= appliedKupon != null ? "readonly" : "" %>>
+                                    <% if (appliedKupon == null) { %>
+                                        <button class="btn btn-outline-primary" type="submit" name="applyCoupon" value="1" formaction="<%= ctx%>/buyer/cart">Apply</button>
+                                    <% } else { %>
+                                        <button class="btn btn-outline-danger" type="submit" name="removeCoupon" value="1" formaction="<%= ctx%>/buyer/cart">Batal</button>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <hr class="my-3">
+                            <% if (appliedKupon != null) { %>
+                                <div class="ep-summary-row" style="font-size: 0.95rem;">
+                                    <span>Total Awal</span>
+                                    <span class="text-secondary"><%= rp(total) %></span>
+                                </div>
+                                <div class="ep-summary-row text-success mb-2" style="font-size: 0.95rem;">
+                                    <span>Potongan (<%= String.format("%.0f", appliedKupon.getPersenDiskon()) %>%)</span>
+                                    <span>- <%= rp(discount) %></span>
+                                </div>
+                            <% } %>
+                            <div class="ep-summary-row mb-3">
                                 <span>Total Pembayaran</span>
-                                <span class="ep-summary-total"><%= rp(total)%></span>
+                                <span class="ep-summary-total"><%= rp(finalTotal)%></span>
                             </div>
                             <button type="submit" class="ep-btn-checkout">Checkout</button>
                         </div>

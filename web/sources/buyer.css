@@ -792,6 +792,10 @@ body {
     background: #ffedd5;
     color: var(--ep-orange-dark);
 }
+.ep-status-dibayar {
+    background: #e0f2fe;
+    color: #0369a1;
+}
 .ep-status-dikirim {
     background: #dbeafe;
     color: var(--ep-blue-dark);
@@ -868,4 +872,28 @@ body {
 .ep-btn-pay-wait:hover {
     border-color: var(--ep-orange);
     color: var(--ep-orange-dark);
+}
+
+/* ---------- Accordion payment method selection and cards ---------- */
+.ep-payment-accordion .accordion-button:not(.collapsed) {
+    background-color: rgba(37, 99, 235, 0.08);
+    color: var(--ep-blue);
+    box-shadow: none;
+}
+.ep-payment-accordion .accordion-button:focus {
+    box-shadow: none;
+}
+.ep-payment-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--ep-border);
+}
+.ep-payment-card:hover {
+    border-color: var(--ep-blue);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.ep-payment-card:has(input[type="radio"]:checked) {
+    border-color: var(--ep-blue) !important;
+    background-color: rgba(37, 99, 235, 0.04);
 }

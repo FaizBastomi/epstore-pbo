@@ -9,8 +9,11 @@
     String rp(double v) {
         return "Rp" + String.format(Locale.US, "%,.0f", v).replace(',', '.');
     }
+
     String esc(String s) {
-        if (s == null) return "";
+        if (s == null) {
+            return "";
+        }
         return s.replace("&", "&amp;").replace("<", "&lt;")
                 .replace(">", "&gt;").replace("\"", "&quot;");
     }
@@ -45,62 +48,38 @@
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-        <link href="<%= ctx %>/sources/buyer.css" rel="stylesheet">
+        <link href="<%= ctx%>/sources/buyer.css" rel="stylesheet">
     </head>
 
     <body>
 
         <!-- ===================== TOP NAVBAR ===================== -->
-        <nav class="ep-navbar">
-            <div class="container py-2">
-                <div class="d-flex align-items-center justify-content-between">
-                    <a href="<%= ctx %>/buyer" class="ep-brand">
-                        <i class="bi bi-bag-fill"></i> EpStore
-                    </a>
-                    <div class="d-flex align-items-center gap-4">
-                        <a href="<%= ctx %>/buyer" class="ep-nav-action">Home</a>
-                        <a href="<%= ctx %>/buyer/cart" class="ep-nav-action">
-                            <span class="position-relative">
-                                <i class="bi bi-cart3 fs-5"></i>
-                                <% if (cartCount > 0) { %>
-                                <span class="ep-cart-badge"><%= cartCount %></span>
-                                <% } %>
-                            </span>
-                            Keranjang
-                        </a>
-                        <a href="<%= ctx %>/buyer/orders" class="ep-nav-action">Pesanan Saya</a>
-                        <a href="<%= ctx %>/buyer/reviews" class="ep-nav-action">Ulasan</a>
-                        <a href="<%= ctx %>/auth?logout" class="ep-nav-action">
-                            <i class="bi bi-box-arrow-right"></i> Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="components/navbar.jsp" />
 
         <!-- ===================== CONTENT ===================== -->
         <main class="container py-4" style="max-width: 760px;">
 
             <h1 class="ep-page-title">Pembayaran</h1>
 
-            <!-- Catatan: halaman pembayaran ini masih dummy -->
-            <div class="alert alert-warning py-2 d-flex align-items-center gap-2">
-                <i class="bi bi-info-circle"></i>
-                <span>Halaman pembayaran ini masih berupa simulasi (dummy).
-                    Langkah pembayaran sesungguhnya akan ditambahkan kemudian.</span>
-            </div>
-
             <!-- Ringkasan pesanan -->
             <div class="ep-cart-card">
                 <div class="ep-pay-head">
                     <div>
-                        <div class="ep-pay-order-id">Order #<%= String.format("%03d", transaksi.getIdTransaksi()) %></div>
+                        <div class="ep-pay-order-id">Order #<%= String.format("%03d", transaksi.getId())%></div>
                         <div class="ep-pay-method">
-                            <i class="bi bi-credit-card"></i> <%= esc(transaksi.getMetode()) %>
+                            <i class="bi bi-credit-card"></i> <%= esc(transaksi.getMetode())%>
                         </div>
                     </div>
-                    <span class="ep-status-badge ep-status-menunggu">
-                        <%= esc(transaksi.getStatus()) %>
+                    <%
+                        String badgeCls = "ep-status-menunggu";
+                        String st = transaksi.getStatus();
+                        if ("Diproses".equals(st)) badgeCls = "ep-status-diproses";
+                        else if ("Dibayar".equals(st)) badgeCls = "ep-status-dibayar";
+                        else if ("Dikirim".equals(st)) badgeCls = "ep-status-dikirim";
+                        else if ("Selesai".equals(st)) badgeCls = "ep-status-selesai";
+                    %>
+                    <span class="ep-status-badge <%= badgeCls %>">
+                        <%= esc(transaksi.getStatus())%>
                     </span>
                 </div>
 
@@ -114,33 +93,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% if (items != null) { for (TransaksiItem it : items) { %>
+                        <% if (items != null) {
+                                for (TransaksiItem it : items) {%>
                         <tr>
-                            <td class="ep-cart-cell"><%= esc(it.getNamaProduk()) %></td>
-                            <td class="ep-cart-cell"><%= rp(it.getHarga()) %></td>
-                            <td class="ep-cart-cell"><%= it.getQty() %></td>
-                            <td class="ep-cart-cell ep-cart-subtotal"><%= rp(it.getSubtotal()) %></td>
+                            <td class="ep-cart-cell"><%= esc(it.getNamaProduk())%></td>
+                            <td class="ep-cart-cell"><%= rp(it.getHarga())%></td>
+                            <td class="ep-cart-cell"><%= it.getQty()%></td>
+                            <td class="ep-cart-cell ep-cart-subtotal"><%= rp(it.getSubtotal())%></td>
                         </tr>
-                        <% } } %>
+                        <% }
+                            }%>
                     </tbody>
                 </table>
 
                 <div class="ep-cart-total-row">
                     <span class="ep-cart-total-label">Total Pembayaran</span>
-                    <span class="ep-cart-total-value"><%= rp(transaksi.getTotalHarga()) %></span>
+                    <span class="ep-cart-total-value"><%= rp(transaksi.getTotalHarga())%></span>
                 </div>
             </div>
 
             <!-- ===================== TOMBOL PEMBAYARAN (DUMMY) ===================== -->
+            <% if ("Menunggu Pembayaran".equals(transaksi.getStatus())) { %>
             <div class="ep-cart-card">
                 <h2 class="ep-section-title">Konfirmasi Pembayaran</h2>
+                
+                <% String pInfo = (String) request.getAttribute("paymentInfo"); 
+                   if (pInfo != null && !pInfo.isEmpty()) { %>
+                    <div class="alert alert-info py-2 mb-3">
+                        <%= pInfo %>
+                        <br><small class="text-muted">Total Tagihan: <strong><%= rp(transaksi.getTotalHarga()) %></strong></small>
+                    </div>
+                <% } %>
+
                 <p class="text-muted mb-3" style="font-size:.9rem;">
                     Pilih salah satu untuk mensimulasikan hasil pembayaran:
                 </p>
                 <div class="row g-3">
                     <div class="col-sm-6">
-                        <form method="post" action="<%= ctx %>/buyer/payment">
-                            <input type="hidden" name="id" value="<%= transaksi.getIdTransaksi() %>">
+                        <form method="post" action="<%= ctx%>/buyer/payment">
+                            <input type="hidden" name="id" value="<%= transaksi.getId()%>">
                             <input type="hidden" name="action" value="success">
                             <button type="submit" class="ep-btn-pay-success w-100">
                                 <i class="bi bi-check-circle"></i> Pembayaran Berhasil
@@ -148,8 +139,8 @@
                         </form>
                     </div>
                     <div class="col-sm-6">
-                        <form method="post" action="<%= ctx %>/buyer/payment">
-                            <input type="hidden" name="id" value="<%= transaksi.getIdTransaksi() %>">
+                        <form method="post" action="<%= ctx%>/buyer/payment">
+                            <input type="hidden" name="id" value="<%= transaksi.getId()%>">
                             <input type="hidden" name="action" value="waiting">
                             <button type="submit" class="ep-btn-pay-wait w-100">
                                 <i class="bi bi-hourglass-split"></i> Menunggu Pembayaran
@@ -158,6 +149,7 @@
                     </div>
                 </div>
             </div>
+            <% } %>
 
         </main>
 

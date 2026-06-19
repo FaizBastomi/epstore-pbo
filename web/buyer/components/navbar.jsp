@@ -50,7 +50,8 @@
             <div class="col">
                 <form class="ep-search" action="<%= ctx%>/buyer" method="GET">
                     <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Cari produk..." value="<%= keyword.replace(" \"", "&quot;")%>">
+                        <input type="text" name="q" class="form-control" placeholder="Cari produk..."
+                               value="<%= keyword.replace(" \"", "&quot;")%>">
                         <button class="btn" type="submit" aria-label="Cari">
                             <i class="bi bi-search"></i>
                         </button>
@@ -61,7 +62,7 @@
             <!-- Actions -->
             <div class="col-auto">
                 <div class="d-flex align-items-center gap-4">
-                    <a href="<%= ctx%>/buyer/cart" class="ep-nav-action <%= isCartPage ? "active" : ""%>">
+                    <a href="<%= ctx%>/buyer/cart" class="ep-nav-action">
                         <span class="position-relative">
                             <i class="bi bi-cart3 fs-5"></i>
                             <% if (cartCountNavbar > 0) {%>
@@ -73,7 +74,8 @@
 
                     <!-- User Dropdown Menu -->
                     <div class="dropdown">
-                        <a href="#" class="ep-nav-action dropdown-toggle d-flex align-items-center gap-1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a href="#" class="ep-nav-action dropdown-toggle d-flex align-items-center gap-1"
+                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle fs-5"></i>
                             <span>
                                 <%= username%>
@@ -139,7 +141,7 @@
                         </li>
                         <li>
                             <a class="dropdown-item d-flex align-items-center gap-2"
-                               href="<%= ctx%>/seller/index.jsp">
+                               href="<%= ctx%>/seller">
                                 <i class="bi bi-shop"></i> Mode Penjual
                             </a>
                         </li>

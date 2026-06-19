@@ -10,7 +10,9 @@
         return;
     }
     String ctx = request.getContextPath();
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(
+    
+    "unchecked")
     List<Produk> produkList = (List<Produk>) request.getAttribute("produkList");
 
     String activeKategori = (String) request.getAttribute("activeKategori");
@@ -51,17 +53,9 @@
             <jsp:param name="keyword" value="<%= keyword%>" />
         </jsp:include>
 
-        <!-- ===================== SECONDARY MENU ===================== -->
-        <div class="ep-submenu">
-            <div class="container">
-                <div class="d-flex gap-4">
-                    <a href="<%= ctx%>/buyer" class="active">Home</a>
-                    <a href="<%= ctx%>/buyer#kategori">Kategori</a>
-                    <a href="<%= ctx%>/buyer/orders">Pesanan Saya</a>
-                    <a href="<%= ctx%>/buyer/reviews">Ulasan</a>
-                </div>
-            </div>
-        </div>
+        <jsp:include page="components/submenu.jsp">
+            <jsp:param name="active" value="home" />
+        </jsp:include>
 
         <!-- ===================== CONTENT ===================== -->
         <main class="container py-4">
@@ -80,8 +74,14 @@
             <!-- Product grid -->
             <div class="row g-3 g-md-4">
                 <%
+                    String currentBuyerId = (String) ses.getAttribute("pembeli_id");
+                    boolean hasVisibleProducts = false;
                     if (produkList != null && !produkList.isEmpty()) {
                         for (Produk p : produkList) {
+                            if (currentBuyerId != null && currentBuyerId.equals(p.getPenjualId())) {
+                                continue;
+                            }
+                            hasVisibleProducts = true;
                             int id = p.getId();
                             String nama = p.getNama();
                             int stok = p.getStok();
@@ -105,8 +105,7 @@
                             </a>
                             <p class="ep-product-price">Rp<%= hargaFmt%></p>
                             <p class="ep-product-stock">Stok: <%= stok%></p>
-                            <form method="post" action="<%= ctx%>/buyer/cart" class="ep-cart-add-form">
-                                <input type="hidden" name="action" value="add">
+                            <form method="post" action="<%= ctx%>/buyer/cart?add" class="ep-cart-add-form">
                                 <input type="hidden" name="produkId" value="<%= id%>">
                                 <input type="hidden" name="qty" value="1">
                                 <button type="submit" class="ep-btn-cart" <%= stok == 0 ? "disabled" : ""%>>
@@ -118,7 +117,8 @@
                     </div>
                 </div>
                 <%      }
-                } else { %>
+                    }
+                    if (!hasVisibleProducts) { %>
                 <div class="col-12">
                     <div class="ep-empty">
                         <i class="bi bi-search"></i>

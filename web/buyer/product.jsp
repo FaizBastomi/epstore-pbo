@@ -131,17 +131,16 @@
                     </div>
 
                     <!-- Quantity + Add to cart -->
-                    <form method="post" action="<%= ctx %>/buyer/cart">
-                        <input type="hidden" name="action" value="add">
-                        <input type="hidden" name="produkId" value="<%= produk.getId() %>">
+                    <form method="post" action="<%= ctx%>/buyer/cart?add">
+                        <input type="hidden" name="produkId" value="<%= produk.getId()%>">
                         <div class="d-flex align-items-center gap-3 my-4">
                             <span class="ep-meta-label">Jumlah</span>
                             <div class="ep-qty">
                                 <button type="button" onclick="changeQty(-1)" aria-label="Kurangi">
                                     <i class="bi bi-dash"></i>
                                 </button>
-                                <input type="text" id="qty" name="qty" value="<%= stok > 0 ? 1 : 0 %>"
-                                       data-max="<%= stok %>" readonly>
+                                <input type="text" id="qty" name="qty" value="<%= stok > 0 ? 1 : 0%>"
+                                       data-max="<%= stok%>" readonly>
                                 <button type="button" onclick="changeQty(1)" aria-label="Tambah">
                                     <i class="bi bi-plus"></i>
                                 </button>
@@ -149,9 +148,9 @@
                         </div>
 
                         <button type="submit" class="ep-btn-cart ep-btn-cart-lg"
-                                <%= stok == 0 ? "disabled" : "" %>>
+                                <%= stok == 0 ? "disabled" : ""%>>
                             <i class="bi bi-cart-plus"></i>
-                            <%= stok == 0 ? "Stok Habis" : "Tambah ke Keranjang" %>
+                            <%= stok == 0 ? "Stok Habis" : "Tambah ke Keranjang"%>
                         </button>
                     </form>
                 </div>
@@ -174,6 +173,15 @@
                             <span class="ep-review-date"><%= tgl%></span>
                         </div>
                         <p class="ep-review-text"><%= u.getKomentar() == null ? "" : u.getKomentar()%></p>
+                        <% if (u.getSellerReply() != null && !u.getSellerReply().trim().isEmpty()) {%>
+                        <div class="mt-2 p-3 bg-light rounded border-start border-primary border-3">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <i class="bi bi-reply-fill text-primary"></i>
+                                <strong class="text-dark small">Balasan Penjual</strong>
+                            </div>
+                            <p class="mb-0 text-secondary small"><%= u.getSellerReply()%></p>
+                        </div>
+                        <% } %>
                     </div>
                 </div>
                 <%     }
@@ -188,18 +196,18 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-                                function changeQty(delta) {
-                                    const input = document.getElementById('qty');
-                                    const max = parseInt(input.dataset.max) || 0;
-                                    let val = (parseInt(input.value) || 0) + delta;
-                                    if (val < 1)
-                                        val = 1;
-                                    if (val > max)
-                                        val = max;
-                                    if (max === 0)
-                                        val = 0;
-                                    input.value = val;
-                                }
+                                    function changeQty(delta) {
+                                        const input = document.getElementById('qty');
+                                        const max = parseInt(input.dataset.max) || 0;
+                                        let val = (parseInt(input.value) || 0) + delta;
+                                        if (val < 1)
+                                            val = 1;
+                                        if (val > max)
+                                            val = max;
+                                        if (max === 0)
+                                            val = 0;
+                                        input.value = val;
+                                    }
         </script>
     </body>
 </html>
