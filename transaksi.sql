@@ -45,7 +45,7 @@ CREATE TABLE `transaksi` (
     KEY `fk_transaksi_pembeli` (`pembeli_id`),
     CONSTRAINT `fk_transaksi_pembeli` FOREIGN KEY (`pembeli_id`)
         REFERENCES `pembeli` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ---------------------------------------------------------------------
 -- Tabel transaksi_item (daftarItem: komposisi Transaksi -> BarangKeranjang)
@@ -66,4 +66,4 @@ CREATE TABLE `transaksi_item` (
         REFERENCES `transaksi` (`id_transaksi`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk_item_produk` FOREIGN KEY (`produk_id`)
         REFERENCES `produk` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

@@ -56,4 +56,15 @@ public class Ulasan extends Model<Ulasan> {
     public void setTanggal(Date tanggal) {
         this.tanggal = tanggal;
     }
+
+    // Additional transient-like field to hold product info
+    private Produk produk;
+
+    public Produk getProduk() {
+        return produk;
+    }
+
+    public void setProduk(Produk produk) {
+        this.produk = produk;
+    }
 }

@@ -48,4 +48,18 @@ public class Pembeli extends Akun {
         this.nomor_telp = nomor_telp;
         this.update();
     }
+
+    public void updateProfil(String alamat, String nomor_telp) {
+        this.alamat = alamat;
+        this.nomor_telp = nomor_telp;
+        this.update();
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
 }
