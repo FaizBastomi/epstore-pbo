@@ -1,0 +1,147 @@
+/* =====================================================================
+ * Payment Module Styles (EpStore)
+ * Menambah style khusus untuk halaman payment dan receipt.
+ * Di-load setelah bootstrap.css dan custom.css utama.
+ * ===================================================================== */
+
+/* Order Summary Table */
+.ep-summary-table th {
+    font-size: 0.9rem;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+.ep-summary-table td {
+    vertical-align: middle;
+}
+.ep-product-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Payment Method Cards */
+.ep-pay-method-card {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.ep-pay-method-card:hover {
+    border-color: #adb5bd;
+    background-color: #f8f9fa;
+}
+/* Menyembunyikan radio aslinya */
+.ep-pay-method-card input[type="radio"] {
+    display: none;
+}
+/* State saat dipilih via JS */
+.ep-pay-method-card.selected {
+    border-color: #0d6efd;
+    background-color: #f0f7ff;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+}
+.ep-pay-icon {
+    font-size: 1.5rem;
+    color: #0d6efd;
+    width: 40px;
+    text-align: center;
+}
+
+/* Detail Panel Container */
+.ep-pay-detail-panel {
+    display: none; /* Disembunyikan secara default, ditampilkan JS */
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    animation: fadeInDown 0.3s ease;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sub-method radio buttons (Bank/E-Wallet options) */
+.ep-submethod-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.5rem;
+}
+.ep-submethod-label {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    background: white;
+    transition: 0.2s;
+    font-weight: 500;
+}
+.ep-submethod-label:hover {
+    background: #f1f3f5;
+}
+.ep-submethod-grid input[type="radio"]:checked + .ep-submethod-label {
+    background: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+/* Dummy QR Placeholder */
+.ep-qr-placeholder {
+    width: 200px;
+    height: 200px;
+    background: #fff;
+    border: 2px dashed #ced4da;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: #adb5bd;
+}
+
+/* Virtual Account Number Box */
+.ep-va-box {
+    background: #e9ecef;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    color: #212529;
+}
+
+/* Receipt Page specific */
+.ep-receipt-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+.ep-receipt-icon.success { color: #198754; }
+.ep-receipt-icon.pending { color: #ffc107; }
+.ep-receipt-icon.failed { color: #dc3545; }
+
+.ep-receipt-card {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border-radius: 16px;
+    overflow: hidden;
+}
+.ep-receipt-header {
+    background: #f8f9fa;
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 2px dashed #dee2e6;
+}
+.ep-receipt-body {
+    padding: 2rem;
+}
