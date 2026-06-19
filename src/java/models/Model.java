@@ -155,7 +155,21 @@ public abstract class Model<E> {
             for (Field field : getFields()) {
                 field.setAccessible(true);
                 try {
-                    field.set(model, rs.getObject(field.getName()));
+                    Object val = rs.getObject(field.getName());
+                    if (val instanceof Number) {
+                        // ponytail: simple type coercion for reflection mapping
+                        Number num = (Number) val;
+                        if (field.getType() == int.class || field.getType() == Integer.class) {
+                            val = num.intValue();
+                        } else if (field.getType() == long.class || field.getType() == Long.class) {
+                            val = num.longValue();
+                        } else if (field.getType() == double.class || field.getType() == Double.class) {
+                            val = num.doubleValue();
+                        } else if (field.getType() == float.class || field.getType() == Float.class) {
+                            val = num.floatValue();
+                        }
+                    }
+                    field.set(model, val);
                 } catch (Exception e) {
                     // ignore column not found
                 }

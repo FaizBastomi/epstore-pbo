@@ -1,0 +1,899 @@
+:root {
+    --ep-blue: #2563eb;        /* brand blue */
+    --ep-blue-dark: #1d4ed8;
+    --ep-orange: #f97316;      /* price + primary action */
+    --ep-orange-dark: #ea580c;
+    --ep-text: #1f2937;
+    --ep-muted: #6b7280;
+    --ep-border: #e5e7eb;
+    --ep-bg: #f8f9fb;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--ep-bg);
+    color: var(--ep-text);
+    margin: 0;
+}
+
+/* ---------- Top navbar ---------- */
+.ep-navbar {
+    background: #fff;
+    border-bottom: 1px solid var(--ep-border);
+}
+
+.ep-brand {
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: var(--ep-blue);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    white-space: nowrap;
+}
+
+.ep-brand i {
+    font-size: 1.5rem;
+}
+
+.ep-search .form-control {
+    border-right: 0;
+}
+
+.ep-search .form-control:focus {
+    box-shadow: none;
+    border-color: var(--ep-border);
+}
+
+.ep-search .btn {
+    background: var(--ep-blue);
+    border-color: var(--ep-blue);
+    color: #fff;
+}
+
+.ep-search .btn:hover {
+    background: var(--ep-blue-dark);
+    border-color: var(--ep-blue-dark);
+}
+
+.ep-nav-action {
+    color: var(--ep-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    position: relative;
+}
+
+.ep-nav-action:hover {
+    color: var(--ep-blue);
+}
+
+.ep-cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: var(--ep-orange);
+    color: #fff;
+    font-size: .65rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: .1rem .4rem;
+    line-height: 1;
+}
+
+/* ---------- Secondary menu ---------- */
+.ep-submenu {
+    background: #fff;
+    border-bottom: 1px solid var(--ep-border);
+}
+
+.ep-submenu a {
+    color: var(--ep-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    padding: .85rem 0;
+    display: inline-block;
+    border-bottom: 2px solid transparent;
+}
+
+.ep-submenu a:hover {
+    color: var(--ep-blue);
+}
+
+.ep-submenu a.active {
+    color: var(--ep-blue);
+    border-bottom-color: var(--ep-blue);
+}
+
+/* ---------- Category filter pills ---------- */
+.ep-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.ep-chip {
+    border: 1px solid var(--ep-border);
+    background: #fff;
+    color: var(--ep-text);
+    border-radius: 999px;
+    padding: .4rem 1.1rem;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s ease;
+}
+
+.ep-chip:hover {
+    border-color: var(--ep-blue);
+    color: var(--ep-blue);
+}
+
+.ep-chip.active {
+    background: var(--ep-blue);
+    border-color: var(--ep-blue);
+    color: #fff;
+}
+
+/* ---------- Product card ---------- */
+.ep-product {
+    background: #fff;
+    border: 1px solid var(--ep-border);
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow .15s ease, transform .15s ease;
+}
+
+.ep-product:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
+    transform: translateY(-2px);
+}
+
+.ep-product-img {
+    position: relative;
+    background: #f1f3f5;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ep-product-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ep-product-img .placeholder-icon {
+    font-size: 3rem;
+    color: #adb5bd;
+}
+
+.ep-product-body {
+    padding: .9rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.ep-product-name {
+    font-weight: 600;
+    font-size: .98rem;
+    margin: 0 0 .35rem;
+    color: var(--ep-text);
+}
+
+.ep-product-price {
+    color: var(--ep-orange);
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin: 0;
+}
+
+.ep-product-stock {
+    color: var(--ep-orange-dark);
+    font-size: .78rem;
+    font-weight: 600;
+    margin: .15rem 0 .9rem;
+}
+
+.ep-btn-cart {
+    margin-top: auto;
+    background: var(--ep-orange);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: .88rem;
+    border-radius: 8px;
+    padding: .55rem;
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    transition: background .15s ease;
+}
+
+.ep-btn-cart:hover {
+    background: var(--ep-orange-dark);
+    color: #fff;
+}
+
+.ep-btn-cart:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+}
+
+/* ---------- Empty state ---------- */
+.ep-empty {
+    text-align: center;
+    color: var(--ep-muted);
+    padding: 4rem 1rem;
+}
+
+.ep-empty i {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: .5rem;
+}
+
+
+/* =====================================================================
+   DETAIL PRODUK (UI Reference sec. 3)
+   ===================================================================== */
+
+/* Make a product card name clickable without changing its look */
+.ep-product-name-link {
+    text-decoration: none;
+    color: inherit;
+}
+.ep-product-name-link:hover .ep-product-name {
+    color: var(--ep-blue);
+}
+
+/* ---------- Breadcrumb ---------- */
+.ep-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .85rem;
+    color: var(--ep-muted);
+}
+.ep-breadcrumb a {
+    color: var(--ep-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+.ep-breadcrumb a:hover {
+    text-decoration: underline;
+}
+.ep-breadcrumb i {
+    font-size: .7rem;
+    color: #adb5bd;
+}
+.ep-breadcrumb .current {
+    color: var(--ep-text);
+    font-weight: 600;
+}
+
+/* ---------- Main image + thumbnails ---------- */
+.ep-detail-img {
+    position: relative;
+    background: #f1f3f5;
+    border: 1px solid var(--ep-border);
+    border-radius: 12px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.ep-detail-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.ep-detail-img .placeholder-icon {
+    font-size: 4rem;
+    color: #adb5bd;
+}
+
+.ep-thumbs {
+    display: flex;
+    gap: .6rem;
+}
+.ep-thumb {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    border: 2px solid var(--ep-border);
+    background: #f1f3f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #adb5bd;
+    cursor: pointer;
+}
+.ep-thumb.active {
+    border-color: var(--ep-blue);
+}
+.ep-thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ---------- Info column ---------- */
+.ep-detail-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 .5rem;
+}
+.ep-detail-price {
+    color: var(--ep-orange);
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 0 0 1.25rem;
+}
+
+.ep-detail-meta {
+    border-top: 1px solid var(--ep-border);
+    padding-top: 1rem;
+}
+.ep-meta-row {
+    display: flex;
+    margin-bottom: .55rem;
+}
+.ep-meta-label {
+    color: var(--ep-muted);
+    font-weight: 600;
+    font-size: .9rem;
+    min-width: 110px;
+}
+.ep-meta-value {
+    color: var(--ep-text);
+    font-weight: 600;
+    font-size: .9rem;
+}
+.ep-detail-desc {
+    margin-top: .75rem;
+    font-size: .92rem;
+    color: #374151;
+    line-height: 1.6;
+}
+
+/* ---------- Quantity selector ---------- */
+.ep-qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--ep-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.ep-qty button {
+    background: #fff;
+    border: none;
+    width: 38px;
+    height: 38px;
+    color: var(--ep-text);
+    cursor: pointer;
+}
+.ep-qty button:hover {
+    background: #f1f3f5;
+}
+.ep-qty input {
+    width: 48px;
+    height: 38px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid var(--ep-border);
+    border-right: 1px solid var(--ep-border);
+    font-weight: 600;
+    background: #fff;
+}
+
+.ep-btn-cart-lg {
+    max-width: 360px;
+    padding: .75rem;
+    font-size: .95rem;
+}
+
+/* ---------- Reviews ---------- */
+.ep-section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--ep-border);
+}
+.ep-stars {
+    color: #f59e0b;
+    font-size: .85rem;
+    letter-spacing: 1px;
+}
+.ep-review {
+    display: flex;
+    gap: .85rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--ep-border);
+}
+.ep-review-avatar {
+    font-size: 2.2rem;
+    color: #cbd5e1;
+    line-height: 1;
+}
+.ep-review-body {
+    flex: 1;
+}
+.ep-review-head {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+.ep-review-name {
+    font-weight: 700;
+    font-size: .92rem;
+}
+.ep-review-date {
+    margin-left: auto;
+    color: var(--ep-muted);
+    font-size: .8rem;
+}
+.ep-review-text {
+    margin: .35rem 0 0;
+    font-size: .9rem;
+    color: #374151;
+}
+
+
+/* =====================================================================
+   KERANJANG BELANJA (UI Reference sec. 4)
+   ===================================================================== */
+
+.ep-page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+}
+
+/* Make nav links usable as active tabs on the cart navbar */
+.ep-nav-action.active {
+    color: var(--ep-blue);
+}
+
+/* ---------- Card wrapper ---------- */
+.ep-cart-card {
+    background: #fff;
+    border: 1px solid var(--ep-border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.ep-btn-shop {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    background: var(--ep-blue);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    border-radius: 8px;
+    padding: .6rem 1.4rem;
+}
+.ep-btn-shop:hover {
+    background: var(--ep-blue-dark);
+    color: #fff;
+}
+
+/* ---------- Cart table ---------- */
+.ep-cart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.ep-cart-table thead th {
+    text-align: left;
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--ep-muted);
+    text-transform: none;
+    padding: .5rem .75rem;
+    border-bottom: 1px solid var(--ep-border);
+}
+.ep-cart-table tbody td {
+    padding: 1rem .75rem;
+    border-bottom: 1px solid var(--ep-border);
+    vertical-align: middle;
+}
+.ep-cart-table .col-harga,
+.ep-cart-table .col-subtotal { white-space: nowrap; }
+.ep-cart-table .col-jumlah { width: 150px; }
+.ep-cart-table .col-aksi { width: 70px; text-align: center; }
+.ep-cart-table tbody td:last-child { text-align: center; }
+
+.ep-cart-product {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+}
+.ep-cart-thumb {
+    position: relative;
+    flex: 0 0 auto;
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    background: #f1f3f5;
+    border: 1px solid var(--ep-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #adb5bd;
+}
+.ep-cart-thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.ep-cart-name {
+    font-weight: 600;
+    font-size: .95rem;
+    color: var(--ep-text);
+    text-decoration: none;
+}
+.ep-cart-name:hover { color: var(--ep-blue); }
+
+.ep-cart-cell {
+    font-size: .92rem;
+    color: var(--ep-text);
+}
+.ep-cart-subtotal { font-weight: 700; }
+
+/* ---------- Quantity control (forms inside .ep-qty) ---------- */
+.ep-qty .ep-qty-form {
+    margin: 0;
+    display: inline-flex;
+}
+.ep-qty .ep-qty-val {
+    width: 48px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--ep-border);
+    border-right: 1px solid var(--ep-border);
+    font-weight: 600;
+    background: #fff;
+}
+
+/* ---------- Trash / remove button ---------- */
+.ep-btn-trash {
+    background: transparent;
+    border: none;
+    color: var(--ep-muted);
+    font-size: 1.05rem;
+    cursor: pointer;
+    padding: .35rem .5rem;
+    border-radius: 6px;
+    transition: color .15s ease, background .15s ease;
+}
+.ep-btn-trash:hover {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+/* ---------- Total row under table ---------- */
+.ep-cart-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 2.5rem;
+    padding-top: 1rem;
+    margin-top: .25rem;
+}
+.ep-cart-total-label {
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+.ep-cart-total-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    min-width: 130px;
+    text-align: right;
+}
+
+/* ---------- Payment method options ---------- */
+.ep-pay-option {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .55rem 0;
+}
+.ep-pay-option .form-check-input {
+    margin: 0;
+    cursor: pointer;
+}
+.ep-pay-option .form-check-input:checked {
+    background-color: var(--ep-blue);
+    border-color: var(--ep-blue);
+}
+.ep-pay-option label {
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--ep-text);
+    cursor: pointer;
+}
+
+/* ---------- Payment summary card ---------- */
+.ep-summary-card {
+    background: #fff;
+    border: 1px solid var(--ep-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+.ep-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+.ep-summary-row > span:first-child {
+    font-weight: 600;
+    color: var(--ep-text);
+}
+.ep-summary-total {
+    color: var(--ep-orange);
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+.ep-btn-checkout {
+    width: 100%;
+    background: var(--ep-orange);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: .98rem;
+    border-radius: 8px;
+    padding: .75rem;
+    transition: background .15s ease;
+}
+.ep-btn-checkout:hover {
+    background: var(--ep-orange-dark);
+    color: #fff;
+}
+
+/* Keep add-to-cart form filling the card bottom on catalog cards */
+.ep-cart-add-form {
+    margin-top: auto;
+    width: 100%;
+}
+.ep-cart-add-form .ep-btn-cart {
+    margin-top: 0;
+}
+
+
+/* =====================================================================
+   PESANAN SAYA (UI Reference sec. 5) + PEMBAYARAN (dummy)
+   ===================================================================== */
+
+/* ---------- Tab filter status ---------- */
+.ep-order-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: 1.25rem;
+}
+.ep-order-tab {
+    border: 1px solid var(--ep-border);
+    background: #fff;
+    color: var(--ep-text);
+    border-radius: 8px;
+    padding: .4rem 1rem;
+    font-size: .85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .15s ease;
+}
+.ep-order-tab:hover {
+    border-color: var(--ep-blue);
+    color: var(--ep-blue);
+}
+.ep-order-tab.active {
+    background: var(--ep-blue);
+    border-color: var(--ep-blue);
+    color: #fff;
+}
+
+/* ---------- Order card ---------- */
+.ep-order-card {
+    background: #fff;
+    border: 1px solid var(--ep-border);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1rem;
+}
+.ep-order-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .55rem;
+}
+.ep-order-id {
+    font-weight: 700;
+    font-size: 1rem;
+}
+.ep-order-date {
+    color: var(--ep-muted);
+    font-size: .85rem;
+}
+.ep-order-products {
+    color: #374151;
+    font-size: .92rem;
+    margin-bottom: .85rem;
+}
+.ep-order-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .75rem;
+    border-top: 1px solid var(--ep-border);
+    padding-top: .85rem;
+}
+.ep-order-total {
+    font-size: .92rem;
+    color: var(--ep-text);
+}
+.ep-order-total strong {
+    font-weight: 800;
+}
+.ep-order-actions {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+/* ---------- Status badge ---------- */
+.ep-status-badge {
+    display: inline-block;
+    font-size: .75rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: .3rem .8rem;
+    white-space: nowrap;
+}
+.ep-status-menunggu {
+    background: #fef3c7;
+    color: #b45309;
+}
+.ep-status-diproses {
+    background: #ffedd5;
+    color: var(--ep-orange-dark);
+}
+.ep-status-dibayar {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+.ep-status-dikirim {
+    background: #dbeafe;
+    color: var(--ep-blue-dark);
+}
+.ep-status-selesai {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+/* ---------- Secondary action button on order card ---------- */
+.ep-btn-order {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    border: 1px solid var(--ep-border);
+    background: #fff;
+    color: var(--ep-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .85rem;
+    border-radius: 8px;
+    padding: .4rem 1rem;
+    transition: all .15s ease;
+}
+.ep-btn-order:hover {
+    border-color: var(--ep-blue);
+    color: var(--ep-blue);
+}
+
+/* ---------- Payment page ---------- */
+.ep-pay-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+.ep-pay-order-id {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+.ep-pay-method {
+    color: var(--ep-muted);
+    font-size: .88rem;
+    margin-top: .15rem;
+}
+
+.ep-btn-pay-success,
+.ep-btn-pay-wait {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .45rem;
+    border: none;
+    font-weight: 700;
+    font-size: .92rem;
+    border-radius: 8px;
+    padding: .75rem;
+    transition: background .15s ease;
+}
+.ep-btn-pay-success {
+    background: #16a34a;
+    color: #fff;
+}
+.ep-btn-pay-success:hover {
+    background: #15803d;
+    color: #fff;
+}
+.ep-btn-pay-wait {
+    background: #fff;
+    color: var(--ep-text);
+    border: 1px solid var(--ep-border);
+}
+.ep-btn-pay-wait:hover {
+    border-color: var(--ep-orange);
+    color: var(--ep-orange-dark);
+}
+
+/* ---------- Accordion payment method selection and cards ---------- */
+.ep-payment-accordion .accordion-button:not(.collapsed) {
+    background-color: rgba(37, 99, 235, 0.08);
+    color: var(--ep-blue);
+    box-shadow: none;
+}
+.ep-payment-accordion .accordion-button:focus {
+    box-shadow: none;
+}
+.ep-payment-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--ep-border);
+}
+.ep-payment-card:hover {
+    border-color: var(--ep-blue);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.ep-payment-card:has(input[type="radio"]:checked) {
+    border-color: var(--ep-blue) !important;
+    background-color: rgba(37, 99, 235, 0.04);
+}

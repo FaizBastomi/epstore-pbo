@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controllers;
 
 import java.io.IOException;
@@ -13,10 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.Pembeli;
 
-/**
- *
- * @author voliya
- */
 @WebServlet(name = "AuthController", urlPatterns = {"/auth"})
 public class AuthController extends HttpServlet {
 
@@ -31,7 +23,13 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getParameter("login") != null) {
+        if (request.getParameter("logout") != null) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            response.sendRedirect(request.getContextPath() + "/auth?login");
+        } else if (request.getParameter("login") != null) {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } else if (request.getParameter("registration") != null) {
             request.getRequestDispatcher("register_form.jsp").forward(request, response);
@@ -52,6 +50,9 @@ public class AuthController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
+        if (username != null) {
+            username = username.replaceAll("\\s+", "").toLowerCase();
+        }
         String password = request.getParameter("password");
 
         HttpSession session = request.getSession();
@@ -76,6 +77,7 @@ public class AuthController extends HttpServlet {
 
                 session.setAttribute("username", username);
                 session.setAttribute("email", fullPembeliData != null ? fullPembeliData.getEmail() : null);
+                session.setAttribute("pembeli_id", fullPembeliData != null ? fullPembeliData.getId() : null);
                 response.sendRedirect(request.getContextPath() + "/");
             } else {
                 request.setAttribute("error", "Username atau password salah");
