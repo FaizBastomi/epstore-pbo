@@ -82,6 +82,7 @@ public class BuyerReviewController extends HttpServlet {
         if (request.getParameter("add") != null) {
             String[] produkIds = request.getParameterValues("produk_ids");
             String username = (String) session.getAttribute("username");
+            String transaksiIdStr = request.getParameter("transaksi_id");
 
             if (produkIds != null) {
                 for (String pId : produkIds) {
@@ -97,6 +98,9 @@ public class BuyerReviewController extends HttpServlet {
 
                         Ulasan u = new Ulasan();
                         u.setProdukId(Integer.parseInt(pId));
+                        if (transaksiIdStr != null) {
+                            try { u.setTransaksiId(Integer.parseInt(transaksiIdStr)); } catch (Exception e){}
+                        }
                         u.setRating(rating);
                         u.setKomentar(komentar);
                         u.setNamaPembeli(username);

@@ -4,8 +4,9 @@ import java.sql.Date;
 
 public class Ulasan extends Model<Ulasan> {
 
-    private int id, produk_id, rating;
+    private int id, produk_id, rating, transaksi_id;
     private String komentar, nama_pembeli, seller_reply;
+    private Date tanggal;
 
     public String getSellerReply() {
         return seller_reply;
@@ -14,7 +15,6 @@ public class Ulasan extends Model<Ulasan> {
     public void setSellerReply(String seller_reply) {
         this.seller_reply = seller_reply;
     }
-    private Date tanggal;
 
     public Ulasan() {
         this.table = "ulasan";
@@ -47,6 +47,14 @@ public class Ulasan extends Model<Ulasan> {
 
     public void setProdukId(int produk_id) {
         this.produk_id = produk_id;
+    }
+
+    public int getTransaksiId() {
+        return transaksi_id;
+    }
+
+    public void setTransaksiId(int transaksi_id) {
+        this.transaksi_id = transaksi_id;
     }
 
     public void setRating(int rating) {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 19, 2026 at 06:13 PM
+-- Generation Time: Jun 20, 2026 at 02:30 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -134,6 +134,7 @@ CREATE TABLE `transaksi` (
   `pembeli_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `tanggal` datetime NOT NULL,
   `metode` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Transfer Bank',
+  `kode_promo` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status_pembayaran` tinyint NOT NULL DEFAULT '0',
   `status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Menunggu Pembayaran',
   `total_harga` double NOT NULL DEFAULT '0'
@@ -178,6 +179,7 @@ DROP TABLE IF EXISTS `ulasan`;
 CREATE TABLE `ulasan` (
   `id` int NOT NULL,
   `produk_id` int NOT NULL,
+  `transaksi_id` int NOT NULL,
   `rating` int NOT NULL DEFAULT '5',
   `nama_pembeli` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `tanggal` date DEFAULT NULL,

@@ -171,7 +171,7 @@
                             if (!items.isEmpty()) {
                                 int firstProdId = items.get(0).getProdukId();
                                 Ulasan qu = new Ulasan();
-                                qu.where("nama_pembeli = '" + ((String) ses.getAttribute("username")).replace("'", "''") + "' AND produk_id = " + firstProdId);
+                                qu.where("nama_pembeli = '" + ((String) ses.getAttribute("username")).replace("'", "''") + "' AND produk_id = " + firstProdId + " AND transaksi_id = " + t.getId());
                                 ArrayList<Ulasan> listUlasan = qu.get();
                                 if (listUlasan != null && !listUlasan.isEmpty()) {
                                     reviewed = true;
