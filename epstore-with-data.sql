@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 20, 2026 at 02:45 PM
+-- Generation Time: Jun 20, 2026 at 03:53 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -49,6 +49,13 @@ CREATE TABLE `ewallet` (
   `platform` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `nomor_hp` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ewallet`
+--
+
+INSERT INTO `ewallet` (`id`, `platform`, `nomor_hp`) VALUES
+(1, 'DANA', '081234567892');
 
 -- --------------------------------------------------------
 
@@ -239,6 +246,13 @@ CREATE TABLE `transfer_bank` (
   `no_rekening` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `transfer_bank`
+--
+
+INSERT INTO `transfer_bank` (`id`, `nama_bank`, `no_rekening`) VALUES
+(1, 'BNI', '123456789143');
+
 -- --------------------------------------------------------
 
 --
@@ -358,7 +372,7 @@ ALTER TABLE `barang_keranjang`
 -- AUTO_INCREMENT for table `ewallet`
 --
 ALTER TABLE `ewallet`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `keranjang`
@@ -388,7 +402,7 @@ ALTER TABLE `transaksi_item`
 -- AUTO_INCREMENT for table `transfer_bank`
 --
 ALTER TABLE `transfer_bank`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ulasan`
