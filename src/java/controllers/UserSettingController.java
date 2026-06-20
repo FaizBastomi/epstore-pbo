@@ -41,20 +41,45 @@ public class UserSettingController extends HttpServlet {
         }
 
         String username = (String) session.getAttribute("username");
+        String newUsername = request.getParameter("username");
+        String password = request.getParameter("password");
         String alamat = request.getParameter("alamat");
         String nomorTelp = request.getParameter("nomor_telp");
 
+        Pembeli p = new Pembeli().getPembeliByUsername(username);
+
         if (alamat == null || alamat.trim().isEmpty()) {
             request.setAttribute("error", "Alamat wajib diisi.");
-            Pembeli p = new Pembeli().getPembeliByUsername(username);
             request.setAttribute("pembeli", p);
             request.getRequestDispatcher("user_setting.jsp").forward(request, response);
             return;
         }
 
-        Pembeli p = new Pembeli().getPembeliByUsername(username);
         if (p != null) {
+            boolean relogin = false;
+            if (newUsername != null && !newUsername.trim().isEmpty() && !newUsername.equals(username)) {
+                if (p.isUsernameExists(newUsername)) {
+                    request.setAttribute("error", "Username sudah terpakai.");
+                    request.setAttribute("pembeli", p);
+                    request.getRequestDispatcher("user_setting.jsp").forward(request, response);
+                    return;
+                }
+                p.editUsername(username, newUsername.trim());
+                relogin = true;
+            }
+            if (password != null && !password.isEmpty()) {
+                p.gantiPassword(password);
+                relogin = true;
+            }
+
             p.updateProfil(alamat.trim(), nomorTelp != null ? nomorTelp.trim() : "");
+            
+            if (relogin) {
+                session.invalidate();
+                response.sendRedirect(request.getContextPath() + "/auth?login");
+                return;
+            }
+
             request.setAttribute("success", "Profil berhasil diperbarui.");
         } else {
             request.setAttribute("error", "Gagal memperbarui profil.");

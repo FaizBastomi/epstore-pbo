@@ -79,9 +79,9 @@
                     <!-- Read-Only Account Details -->
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted" style="font-size: 0.9rem;">Username</label>
-                            <input type="text" class="form-control bg-light text-secondary border-0" 
-                                   value="<%= usernameVal %>" disabled readonly>
+                            <label class="form-label fw-semibold text-dark" style="font-size: 0.9rem;">Username</label>
+                            <input type="text" class="form-control" name="username" 
+                                   value="<%= usernameVal %>" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-muted" style="font-size: 0.9rem;">Email</label>
@@ -106,6 +106,15 @@
                         <label for="nomor_telp" class="form-label fw-semibold text-dark">Nomor Telepon</label>
                         <input type="text" class="form-control" id="nomor_telp" name="nomor_telp" 
                                placeholder="Masukkan nomor telepon aktif" value="<%= nomorTelp %>">
+                    </div>
+
+                    <hr class="my-4 text-muted opacity-25">
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-semibold text-dark">Password Baru</label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Kosongkan jika tidak ingin mengubah password">
+                        <small class="text-muted">Akan diminta login ulang setelah ganti username/password</small>
                     </div>
 
                     <div class="d-grid mt-4">
