@@ -59,6 +59,7 @@ public class Pembeli extends Akun {
         return this.username;
     }
 
+    @Override
     public String getEmail() {
         return this.email;
     }

@@ -3,7 +3,7 @@ package models;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Akun extends Model<Akun> {
+public abstract class Akun extends Model<Akun> {
 
     protected String id;
     protected String username;
@@ -40,9 +40,7 @@ public class Akun extends Model<Akun> {
         return id;
     }
 
-    public String getEmail() {
-        return email;
-    }
+    public abstract String getEmail();
 
     public void setEmail(String email) {
         this.email = email;

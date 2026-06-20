@@ -11,6 +11,7 @@ public class Transaksi extends Model<Transaksi> {
     private int status_pembayaran;
     private String status;
     private double total_harga;
+    private String kode_promo;
 
     public Transaksi() {
         this.table = "transaksi";
@@ -27,6 +28,8 @@ public class Transaksi extends Model<Transaksi> {
     public String getStatus() {
         return status;
     }
+    
+    public String getKodePromo() { return kode_promo; }
 
     public ArrayList<TransaksiItem> getDaftarItem() {
         TransaksiItem ti = new TransaksiItem();
@@ -47,6 +50,7 @@ public class Transaksi extends Model<Transaksi> {
             Kupon k = new Kupon().find(couponCode.trim());
             if (k != null && k.cekMasaBerlaku()) {
                 total -= k.hitungPotongan(total);
+                this.kode_promo = k.getKodePromo();
             }
         }
         this.total_harga = total;

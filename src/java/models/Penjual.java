@@ -37,6 +37,11 @@ public class Penjual extends Akun {
     public String getNamaToko() {
         return namaToko;
     }
+    
+    @Override
+    public String getEmail() {
+        return this.email;
+    }
 
     public String getId() {
         if (this.username != null) {
